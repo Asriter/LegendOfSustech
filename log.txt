@@ -1,1 +1,2 @@
+10.22 character_temp改名为CharacterTemp，并且写了更多
 10.21 写了下character_temp中的一些东西
