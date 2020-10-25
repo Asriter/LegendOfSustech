@@ -1,2 +1,10 @@
-10.22 character_temp改名为CharacterTemp，并且写了更多
-10.21 写了下character_temp中的一些东西
+10.24 
+CharacterTemp改名为Character，更改为抽象类，将大部分方法实现好了
+增加Buff类
+增加一次答辩用的TankTemp，WarriorTemp，MvpTemp
+
+10.22 
+character_temp改名为CharacterTemp，并且写了更多
+
+10.21 
+写了下character_temp中的一些东西
