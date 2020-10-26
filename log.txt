@@ -1,3 +1,12 @@
+10.27 0.55
+在了GridUnit中添加了Character变量，并重置了initial()
+在battle_data中添加了未完成的方法battle_data()和showCharacter()
+    因为没有确定传输过来的数据格式而没有为battle_data()添加变量
+    本应在这里传入两个用户的阵容信息和角色属性
+在controller中加入了instance方法，新增了未完成的initial()和GetGridUnitByVector3(Vector3Int location)
+    完成了所有格子的序列化
+新增了main类用于开始游戏和初始化controller以及一系列动作，但是现在还什么都没有
+
 10.26	17:38
 将关于buff的方法全部实现，以后和buff有关的工作只剩多设计点buff
 buff有关公式可以直接看代码，看不懂问全（不会这么多注释都看不懂吧不会吧不会吧）
