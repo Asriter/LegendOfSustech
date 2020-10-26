@@ -1,43 +1,30 @@
 ﻿//Buff的class
+
+using System.Collections.Generic;
+
 public abstract class Buff
 {
     public BuffKind _buffKind;
-    public double _effect; //效果量：数值或者百分比
+    private double _amount; //效果量：数值或者百分比
+    public bool _percent; //根据此boolean值确定buff是数值buff还是百分比buff
     public int _remain;
 
-    public abstract double Count(double num);
+    //buff的计算方法
+    public double Count(double num)
+    {
+        if (_percent) //判断是数值还是百分比buff
+        {
+            return num * (1 + _amount / 100); //若百分比buff的_amount为15，则表示数值+15%
+        }
+        return num + _amount; //若数值buff的_amount为15，则表示数值+15
+    }
 
-    public Buff(BuffKind buffKind, double effect, int remain)
+    public Buff(BuffKind buffKind, double amount, bool percent, int remain)
     {
         _buffKind = buffKind;
-        _effect = effect;
+        _amount = amount;
+        _percent = percent;
         _remain = remain;
-    }
-}
-
-public class AmountBuff : Buff //数值类buff
-{
-    public AmountBuff(BuffKind buffKind, double effect, int remain) : base(buffKind, effect, remain)
-    {
-    }
-
-    public override double Count(double num)
-    {
-        //TODO: 计算数值
-        return num;
-    }
-}
-
-public class PercantageBuff : Buff //百分比buff
-{
-    public PercantageBuff(BuffKind buffKind, double effect, int remain) : base(buffKind, effect, remain)
-    {
-    }
-
-    public override double Count(double num)
-    {
-        //TODO: 计算数值
-        return num;
     }
 }
 
@@ -45,6 +32,7 @@ public enum BuffKind
 {
     Atk,
     Def,
+    Damage,
     GainDamage,
     Heal,
     GainHeal

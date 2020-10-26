@@ -1,3 +1,9 @@
+10.26	17:38
+将关于buff的方法全部实现，以后和buff有关的工作只剩多设计点buff
+buff有关公式可以直接看代码，看不懂问全（不会这么多注释都看不懂吧不会吧不会吧）
+除了buff以外Character小修，Character包含重要TODO:Get_target()方法
+因为Character小修所以TankTemp，WarriorTemp，MvpTemp也小修
+
 10.24 
 CharacterTemp改名为Character，更改为抽象类，将大部分方法实现好了
 增加Buff类
