@@ -7,9 +7,9 @@ public class MvpTemp : Character
 
     protected override int Skill()
     {
-        double atk = base.Count_atk();
-        double damage = base.Count_damage(2 * atk);
-        Get_target()[0].Defense(damage);
+        double atk = Count_atk();
+        double damage = Count_damage(2 * atk);
+        Get_target().Defense(damage);
         return 1;
     }
 
