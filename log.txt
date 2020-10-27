@@ -1,3 +1,8 @@
+10.27	20:06
+Get_target未实现，新增Get_location需实现
+Character新增报文，已实现相关事情
+Character新增放动画的方法（未实现），和暴击的方法
+
 10.27 0.55
 在了GridUnit中添加了Character变量，并重置了initial()
 在battle_data中添加了未完成的方法battle_data()和showCharacter()

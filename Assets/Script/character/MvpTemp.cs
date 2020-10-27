@@ -1,7 +1,7 @@
 ﻿//一次答辩用，输出
 public class MvpTemp : Character
 {
-    public MvpTemp() : base(2600, 3000, 15)
+    public MvpTemp() : base(2600, 3000, 15, 5)
     {
     }
 
@@ -14,6 +14,18 @@ public class MvpTemp : Character
     }
 
     protected override void Die()
+    {
+    }
+    
+    public override void Attack_cartoon()
+    {
+    }
+
+    public override void Defense_cartoon()
+    {
+    }
+
+    public override void Die_cartoon()
     {
     }
 }

@@ -3,45 +3,64 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = System.Random;
 
 public abstract class Character : MonoBehaviour
 {
     //属性
-    protected readonly double _maxHp; //最大生命值
-    protected double _hp; //当前生命
-    protected int _mp = 50; //蓝量，满蓝放技能
-    protected readonly double _atk; //攻击力
-    protected readonly double _def; //防御
+    private readonly double _maxHp; //最大生命值
+    private double _hp; //当前生命
+    private int _mp = 50; //蓝量，满蓝放技能
+    private readonly double _atk; //攻击力
+    private readonly double _def; //防御
+    private readonly double _critic; //暴击率，5表示5%暴击率
     private List<Buff> _buffs; //rt
+    private List<float> _msg; //报文
 
     //待添加
 
     //构造器
-    protected Character(double hp, double atk, double def)
+    protected Character(double hp, double atk, double def, double critic)
     {
         _maxHp = hp;
         _hp = hp;
         _atk = atk;
         _def = def;
+        _critic = critic;
         _buffs = new List<Buff>();
+        _msg = new List<float>();
     }
 
     //行动，轮到角色行动时调用此方法
-    public void Action()
+    public List<float> Action()
     {
+        _msg.Clear();
+        _msg.Append(Get_location().x);
+        _msg.Append(Get_location().y);
+        _msg.Append(Get_location().z);
         if (_mp < 100) //怒气小于100普攻，否则skill
         {
+            _msg.Append(0);
             Attack();
             Modify_mp(25); //普攻怒气加25
         }
         else
         {
+            _msg.Append(1);
             Skill();
             Modify_mp(0);
         }
-
+        
         Check_buff_remain(); //skill后怒气归零
+        return _msg;
+    }
+
+    public Vector3 Get_location()
+    {
+        //TODO
+        return new Vector3();
     }
 
     //调整怒气值，参数不为0时怒气加上参数，参数为0时怒气归零
@@ -94,6 +113,19 @@ public abstract class Character : MonoBehaviour
         return damage;
     }
 
+    //计算暴击
+    protected double Count_critic(double damage)
+    {
+        if (new Random().NextDouble() <= _critic / 100)
+        {
+            _msg.Append(1);
+            return damage * 2;
+        }
+
+        _msg.Append(0);
+        return damage;
+    }
+
     //获取攻击目标
     protected Character Get_target()
     {
@@ -124,7 +156,7 @@ public abstract class Character : MonoBehaviour
     protected double Count_def()
     {
         double def = _def;
-        def = Buff_affect(def, BuffKind.Def);//根据buff增减实际防御
+        def = Buff_affect(def, BuffKind.Def); //根据buff增减实际防御
         def = Math.Min(def, 75); //无论怎么加，防御最高为75 （即只受四分之一的伤害）
         return def;
     }
@@ -132,7 +164,7 @@ public abstract class Character : MonoBehaviour
     //获得治疗
     public void Get_heal(double heal)
     {
-        heal = Buff_affect(heal, BuffKind.GainHeal);  //根据buff增减获得治疗量
+        heal = Buff_affect(heal, BuffKind.GainHeal); //根据buff增减获得治疗量
         _hp = Math.Min(_maxHp, _hp + heal); //当前hp不会超过maxHp
     }
 
@@ -153,7 +185,8 @@ public abstract class Character : MonoBehaviour
             {
                 num = _buffs[i].Count(num); //若是，则根据buff增减治疗量
             }
-        }  //由于排序时百分比buff在后面，数值buff在前面，所以遍历时会先加数值再乘百分比
+        } //由于排序时百分比buff在后面，数值buff在前面，所以遍历时会先加数值再乘百分比
+
         return num;
     }
 
@@ -162,4 +195,10 @@ public abstract class Character : MonoBehaviour
 
     //退场动画，效果等
     protected abstract void Die();
+
+    public abstract void Attack_cartoon();
+
+    public abstract void Defense_cartoon();
+
+    public abstract void Die_cartoon();
 }

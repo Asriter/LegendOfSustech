@@ -1,7 +1,7 @@
 ﻿//一次答辩用，战士/辅助
 public class WarriorTemp : Character
 {
-    public WarriorTemp() : base(2500, 1750, 30)
+    public WarriorTemp() : base(2500, 1750, 30, 5)
     {
     }
 
@@ -14,6 +14,18 @@ public class WarriorTemp : Character
     }
 
     protected override void Die()
+    {
+    }
+
+    public override void Attack_cartoon()
+    {
+    }
+
+    public override void Defense_cartoon()
+    {
+    }
+
+    public override void Die_cartoon()
     {
     }
 }
