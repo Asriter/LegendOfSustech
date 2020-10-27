@@ -7,21 +7,44 @@ using UnityEngine;
 public class battle_data
 {
     //应该加载的所有角色
-    private List<Character> characterList;
-    //对应角色在战场中的位置，Vector3的3个变量分别为敌我，x坐标，y坐标
-    //x坐标从左到右
-    //y坐标从中间到两边
-    private List<Vector3Int> characterLocation;
+    //第一个参数是敌我，0是我1是敌
+    //第二个是x坐标，从左到右递增0-2
+    //第三个是y坐标，从里到外0-2
+    private Character[,,] characterList;
+
+    public List<int[]> battleData;
     
-    //未确定发来的信息的形式，故此处先没有传参
-    public battle_data()
+    //传来的参数为两个List，每个List中都是长度为7的int数组
+    //id, x, y, hp, atk, def, cri
+    public battle_data(List<int[]> myCharacterList, List<int[]> opponentCharacterList)
     {
         //初始化list
-        characterList = new List<Character>();
-        characterLocation = new List<Vector3Int>();
+        characterList = new Character[2,3,3];
         
-        //读取数据并将prefab加载到list中
-        //TODO
+        //读取数据并加载到list中
+        foreach(int[] property in myCharacterList)
+        {
+            Character c = CharacterFactory.CreateCharacter(property[0]);
+            //暂时不写属性操控方法
+            characterList[0, property[1], property[2]] = c;
+        }
+        foreach(int[] property in opponentCharacterList)
+        {
+            Character c = CharacterFactory.CreateCharacter(property[0]);
+            //暂时不写属性操控方法
+            characterList[1, property[1], property[2]] = c;
+        }
+
+        
+    }
+
+    private List<int[]> GetBattleData()
+    {
+        battleData = new List<int[]>();
+
+        //TODO模拟战斗，得到battledata
+
+        return battleData;
     }
 
     //将单位的Perfber添加到对应格子中并显示出来

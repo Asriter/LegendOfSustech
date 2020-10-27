@@ -17,11 +17,13 @@ public abstract class Character : MonoBehaviour
     private readonly double _def; //防御
     private readonly double _critic; //暴击率，5表示5%暴击率
     private List<Buff> _buffs; //rt
-    private List<float> _msg; //报文
+    private List<int> _msg; //报文
+    private GridUnit _grid;//在那个格子里
+    protected int id;//用于实例化之后的单位，通过id获取对应对象
 
     //待添加
 
-    //构造器
+    //构造器,里面不放参数，参数修改放到下面的initial里面,调用perfab的时候不知道会不会加载构造函数
     protected Character(double hp, double atk, double def, double critic)
     {
         _maxHp = hp;
@@ -30,11 +32,11 @@ public abstract class Character : MonoBehaviour
         _def = def;
         _critic = critic;
         _buffs = new List<Buff>();
-        _msg = new List<float>();
+        _msg = new List<int>();
     }
 
     //行动，轮到角色行动时调用此方法
-    public List<float> Action()
+    public List<int> Action()
     {
         _msg.Clear();
         _msg.Append(Get_location().x);
@@ -57,10 +59,9 @@ public abstract class Character : MonoBehaviour
         return _msg;
     }
 
-    public Vector3 Get_location()
+    public Vector3Int Get_location()
     {
-        //TODO
-        return new Vector3();
+        return _grid.GetLocation();
     }
 
     //调整怒气值，参数不为0时怒气加上参数，参数为0时怒气归零
@@ -201,4 +202,15 @@ public abstract class Character : MonoBehaviour
     public abstract void Defense_cartoon();
 
     public abstract void Die_cartoon();
+
+    //在初始化battledata的时候用，把所在的格子加进来
+    public void SetGrid(GridUnit grid)
+    {
+        this._grid = grid;
+    }
+
+    public int GetId()
+    {
+        return id;
+    }
 }

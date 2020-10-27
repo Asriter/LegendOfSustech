@@ -12,6 +12,9 @@ public class controller : MonoBehaviour
     {
         get
         {
+            if(instance == null)
+                instance = GameObject.Find("Controller").GetComponent<controller>();
+                
             return instance;
         }
     }
@@ -41,15 +44,21 @@ public class controller : MonoBehaviour
     }
 
     //初始化controller
-    public void Initial(battle_data battleData)
+    public void Initial()//battle_data battleData)
     {
         //清空gridunits中所有格子里的单位
-        for(int i = 0; i < 18; i++)
+        for(int i = 0; i < 2; i++)
         {
-            gridUnits[i].initial();
+            for(int x = 0; x < 3; x++)
+            {
+                for(int y = 0; y < 3; y++)
+                {
+                    gridUnits[i*9 + x*3 + y].initial(new Vector3Int(i, x, y));
+                }
+            }
         }
 
-        this.battleData = battleData;
+        //this.battleData = battleData;
 
         //开始往格子里添加单位
         //TODO
@@ -61,7 +70,7 @@ public class controller : MonoBehaviour
     //通过坐标获取对应grid
     public GridUnit GetGridUnitByVector3(Vector3Int location)
     {
-        int index = location.x*9 + location.y*2 + location.z;
+        int index = location.x*9 + location.y*3 + location.z;
         return gridUnits[index];
     }
 }

@@ -3,6 +3,7 @@ public class TankTemp : Character
 {
     public TankTemp() : base(3600, 1000, 40, 5)
     {
+        this.id = 2;
     }
 
     protected override int Skill()

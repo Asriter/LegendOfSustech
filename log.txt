@@ -1,3 +1,11 @@
+10.28 0.44
+Get_location以实现
+修改Character，添加了id属性，用于区分以及可能用到的通过id获取角色名，图片等功能
+新增CharacterFactory，通过输入id来建立不同的class
+修改Controller的instance方法
+完成BattleData中对于双方属性的加载，暂时未完成战斗流程的仿真计算
+在grid和character中分别加入了对方的指针，用于快捷找到当前位置
+
 10.27	20:06
 Get_target未实现，新增Get_location需实现
 Character新增报文，已实现相关事情

@@ -3,6 +3,7 @@ public class WarriorTemp : Character
 {
     public WarriorTemp() : base(2500, 1750, 30, 5)
     {
+        this.id = 3;
     }
 
     protected override int Skill()
