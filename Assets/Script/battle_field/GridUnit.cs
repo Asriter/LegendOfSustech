@@ -2,45 +2,54 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace test_demo
+
+public class GridUnit : MonoBehaviour
 {
-    public class GridUnit : MonoBehaviour
+    //颜色设置
+    [SerializeField] private SpriteRenderer tileRenderer;
+
+    Color _color;
+
+    private Character character;
+
+    public void initial()
     {
-        //颜色设置
-        [SerializeField] private SpriteRenderer tileRenderer;
+        //调颜色，测试用，可删
+        tileRenderer.color = new Color(0, 0, 200, 0.3f);
+        //清空character
+        character = null;
+    }
 
-        Color _color;
+    public bool IsCharacterEmpty()
+    {
+        return character != null;
+    }
 
-        public void Start()
+    public Character GetCharacter()
+    {
+        return character;
+    }
+
+    public void Refresh(int objectType)
+    {
+        //根据格子类型切换颜色
+        switch (objectType)
         {
-            initial();
-        }
+            case 0:
+                tileRenderer.color = new Color(255, 0, 0, 0.3f);
+                //Debug.Log("blue");
+                break;
 
-        public void initial()
-        {
-            tileRenderer.color = new Color(0, 0, 200, 0.3f);
-        }
+            case 1:
+                tileRenderer.color = new Color(0, 0, 255, 0.3f);
+                //Debug.Log("是否修改颜色0");
+                break;
 
-        public void Refresh(int objectType)
-        {
-            //根据格子类型切换颜色
-            switch (objectType)
-            {
-                case 0:
-                    tileRenderer.color = new Color(255, 0, 0, 0.3f);
-                    //Debug.Log("blue");
-                    break;
-
-                case 1:
-                    tileRenderer.color = new Color(0, 0, 255, 0.3f);
-                    //Debug.Log("是否修改颜色0");
-                    break;
-
-                default:
-                    tileRenderer.color = new Color(0, 0, 0, 0);
-                    //Debug.Log("是否修改颜色1");
-                    break;
-            }
+            default:
+                tileRenderer.color = new Color(0, 0, 0, 0);
+                //Debug.Log("是否修改颜色1");
+                break;
         }
     }
 }
+
