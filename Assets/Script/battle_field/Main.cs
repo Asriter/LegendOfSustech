@@ -10,7 +10,7 @@ public class Main : MonoBehaviour
 {
     [SerializeField] public SpriteRenderer backGround;
 
-    //public item.equipment e;
+    [SerializeField] public controller c;
 
     public battle_data battleData;
     // Start is called before the first frame update
@@ -19,10 +19,11 @@ public class Main : MonoBehaviour
     private void Awake()
     {
         //获取双方对战数据，生成battleData
+       
     }
     void Start()
     {
-
+        
     }
 
 

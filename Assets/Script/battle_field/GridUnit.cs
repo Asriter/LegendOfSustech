@@ -12,12 +12,29 @@ public class GridUnit : MonoBehaviour
 
     private Character character;
 
+    private Vector3Int location;
+
     public void initial()
     {
         //调颜色，测试用，可删
         tileRenderer.color = new Color(0, 0, 200, 0.3f);
         //清空character
         character = null;
+    }
+
+    public void initial(Vector3Int location)
+    {
+        //调颜色，测试用，可删
+        tileRenderer.color = new Color(0, 0, 200, 0.3f);
+        //清空character
+        character = null;
+
+        this.location = location;
+    }
+
+    public Vector3Int GetLocation()
+    {
+        return location;
     }
 
     public bool IsCharacterEmpty()
@@ -27,7 +44,13 @@ public class GridUnit : MonoBehaviour
 
     public Character GetCharacter()
     {
-        return character;
+        if(character != null)
+            return character;
+        else
+        {
+            Debug.Log("该格子里没有任何对象");
+            return null;
+        }
     }
 
     public void Refresh(int objectType)

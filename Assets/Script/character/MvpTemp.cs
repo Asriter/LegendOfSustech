@@ -3,6 +3,7 @@ public class MvpTemp : Character
 {
     public MvpTemp() : base(2600, 3000, 15, 5)
     {
+        this.id = 1;
     }
 
     protected override int Skill()

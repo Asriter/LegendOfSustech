@@ -36,12 +36,14 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Script\battle_field\BattleCreater.cs" />
      <Compile Include="Assets\Script\battle_field\GridUnit.cs" />
      <Compile Include="Assets\Script\battle_field\Main.cs" />
      <Compile Include="Assets\Script\battle_field\battle_data.cs" />
      <Compile Include="Assets\Script\battle_field\controller.cs" />
      <Compile Include="Assets\Script\character\Buff.cs" />
      <Compile Include="Assets\Script\character\Character.cs" />
+     <Compile Include="Assets\Script\character\CharacterFactory.cs" />
      <Compile Include="Assets\Script\character\MvpTemp.cs" />
      <Compile Include="Assets\Script\character\TankTemp.cs" />
      <Compile Include="Assets\Script\character\WarriorTemp.cs" />
