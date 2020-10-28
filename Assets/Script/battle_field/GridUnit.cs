@@ -42,6 +42,11 @@ public class GridUnit : MonoBehaviour
         return character != null;
     }
 
+    public void SetCharacter(Character character)
+    {
+        this.character = character;
+    }
+
     public Character GetCharacter()
     {
         if(character != null)

@@ -1,3 +1,9 @@
+10.29 1.54
+实现了controller和battledata的获取
+实现了最简单的动画
+！！！！！battledata的获取可能存在bug，先传上来，该天修改
+！！！！大幅度修改character，考虑将动画和data彻底分开成两个class
+
 10.28 0.44
 Get_location以实现
 修改Character，添加了id属性，用于区分以及可能用到的通过id获取角色名，图片等功能
