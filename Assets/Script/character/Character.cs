@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using UnityEngine;
 using Random = System.Random;
@@ -10,58 +11,68 @@ using Random = System.Random;
 public abstract class Character : MonoBehaviour
 {
     //属性
-    private readonly double _maxHp; //最大生命值
-    private double _hp; //当前生命
-    private int _mp = 50; //蓝量，满蓝放技能
+    public readonly double _maxHp; //最大生命值
+    public double _hp; //当前生命
+    public int _mp = 50; //蓝量，满蓝放技能
     private readonly double _atk; //攻击力
     private readonly double _def; //防御
     private readonly double _critic; //暴击率，5表示5%暴击率
+    public readonly double _speed;
     private List<Buff> _buffs; //rt
     private List<int> _msg; //报文
-    private GridUnit _grid;//在那个格子里
-    protected int id;//用于实例化之后的单位，通过id获取对应对象
+    private Vector3Int location; //在那个格子里
+    protected int id; //用于实例化之后的单位，通过id获取对应对象
+
+    //TODO 可否调用动画，该选项存疑暂不使用
+    //public bool isAnimation = false;
+
+    //TODO在调用action的时候传入，可能加入set
+    private battle_data battleData;
 
     //待添加
 
     //构造器,里面不放参数，参数修改放到下面的initial里面,调用perfab的时候不知道会不会加载构造函数
-    protected Character(double hp, double atk, double def, double critic)
+    protected Character(double hp, double atk, double def, double critic, double speed)
     {
         _maxHp = hp;
         _hp = hp;
         _atk = atk;
         _def = def;
         _critic = critic;
+        _speed = speed;
         _buffs = new List<Buff>();
         _msg = new List<int>();
     }
 
     //行动，轮到角色行动时调用此方法
-    public List<int> Action()
+    public List<int> Action(battle_data battleData)
     {
+        Vector3Int location = Get_location();
+        this.battleData = battleData;
         _msg.Clear();
-        _msg.Append(Get_location().x);
-        _msg.Append(Get_location().y);
-        _msg.Append(Get_location().z);
+        _msg.Add(location.x);
+        _msg.Add(location.y);
+        _msg.Add(location.z);
         if (_mp < 100) //怒气小于100普攻，否则skill
         {
-            _msg.Append(0);
-            Attack();
+            _msg.Add(0);
+            Attack(Count_critic());
             Modify_mp(25); //普攻怒气加25
         }
         else
         {
-            _msg.Append(1);
-            Skill();
+            _msg.Add(1);
+            Skill(Count_critic());
             Modify_mp(0);
         }
-        
+
         Check_buff_remain(); //skill后怒气归零
         return _msg;
     }
 
     public Vector3Int Get_location()
     {
-        return _grid.GetLocation();
+        return this.location;
     }
 
     //调整怒气值，参数不为0时怒气加上参数，参数为0时怒气归零
@@ -91,12 +102,17 @@ public abstract class Character : MonoBehaviour
     }
 
     //用于通常攻击，在攻击完成之后返回状态值，让主程序继续运行
-    protected int Attack()
+    //将返回状态值修改成返回伤害
+    public double Attack(bool isCritic)
     {
         double atk = Count_atk();
         double damage = Count_damage(atk);
-        Get_target().Defense(damage);
-        return 1;
+        //damage = this.Count_critic(damage);
+        //是否暴击
+        if(isCritic)
+            damage *= 2;
+        Get_target(false)[0].Defense(damage);
+        return damage;
     }
 
     //计算实际攻击力
@@ -115,22 +131,62 @@ public abstract class Character : MonoBehaviour
     }
 
     //计算暴击
-    protected double Count_critic(double damage)
+    protected bool Count_critic()
     {
         if (new Random().NextDouble() <= _critic / 100)
         {
-            _msg.Append(1);
-            return damage * 2;
+            _msg.Add(1);
+            return true;
         }
 
-        _msg.Append(0);
-        return damage;
+        _msg.Add(0);
+        return false;
     }
 
     //获取攻击目标
-    protected Character Get_target()
+    //一般来说isskill没什么用，但如果技能和平A攻击范围不同时有用
+    //面对范围攻击的情况，此处返回值修改为list
+    public List<Character> Get_target(bool skill) //TODO
     {
-        //TODO: 获取攻击目标
+        List<Character> list = new List<Character>();
+
+        Vector3Int location = Get_location();
+        //设置battleData
+        if(battleData == null)
+            battleData = controller.Instance.battleData;
+        Character[,,] enemies = battleData.GetCharacterList();
+        Character enemy;
+        int enemyGroup = location[0] == 0? 1 : 0;
+        for (int i = 0; i < 3; i++)
+        {
+            //检测当前位置有没有东西
+            if(!battleData.hasCharacterInGrid(enemyGroup, location.y, i))
+                continue;
+            enemy = enemies[enemyGroup, location.y, i];
+            if (enemy._hp > 0)
+            {
+                list.Add(enemy);
+                return list;
+            }
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (i != location.y)
+                for (int j = 0; j < 3; j++)
+                {
+                    //检测当前位置有没有东西
+                    if(!battleData.hasCharacterInGrid(enemyGroup, i, j))
+                        continue;
+                    enemy = enemies[enemyGroup, i, j];
+                    if (enemy._hp > 0)
+                    {
+                        list.Add(enemy);
+                        return list;
+                    }
+                }
+        }
+
         return null;
     }
 
@@ -192,25 +248,86 @@ public abstract class Character : MonoBehaviour
     }
 
     //释放技能，该部分根据各个单位的子类具体实现
-    protected abstract int Skill();
-
-    //退场动画，效果等
-    protected abstract void Die();
-
-    public abstract void Attack_cartoon();
-
-    public abstract void Defense_cartoon();
-
-    public abstract void Die_cartoon();
-
-    //在初始化battledata的时候用，把所在的格子加进来
-    public void SetGrid(GridUnit grid)
-    {
-        this._grid = grid;
-    }
+    public abstract int Skill(bool isCritic);
 
     public int GetId()
     {
         return id;
+    }
+
+    public double GetHp()
+    {
+        return _hp;
+    }
+
+    public void SetLocation(Vector3Int location)
+    {
+        this.location = location;
+    }
+
+    //退场动画，效果等
+    protected abstract void Die();
+
+    //暂时用于演示demo，后续加细节
+    //调用时传入攻击目标，用于后期实现更多动画
+    IEnumerator Attack_cartoon(List<Character> target)
+    {
+        this.gameObject.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+        yield return new WaitForSeconds(0.3f);
+        this.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        yield return new WaitForSeconds(0.1f);
+    }
+
+    //调用
+    public void Start_Attack_cartoon(List<Character> target)
+    {
+        StartCoroutine(Attack_cartoon(target));
+    }
+
+        //暂时用于演示demo，后续加细节
+    //调用时传入攻击目标，用于后期实现更多动画
+    IEnumerator Skill_cartoon(List<Character> target)
+    {
+        this.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 0, 255, 1f);
+        this.gameObject.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+        yield return new WaitForSeconds(0.3f);
+        this.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        this.gameObject.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 1f);
+        yield return new WaitForSeconds(0.1f);
+    }
+
+    //调用
+    public void Start_Skill_cartoon(List<Character> target)
+    {
+        StartCoroutine(Skill_cartoon(target));
+    }
+
+    IEnumerator Defense_cartoon()
+    {
+        this.gameObject.GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 1f);
+        yield return new WaitForSeconds(0.3f);
+        this.gameObject.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 1f);
+        yield return new WaitForSeconds(0.1f);
+    }
+
+    //调用
+    public void Start_Defense_cartoon()
+    {
+        StartCoroutine(Defense_cartoon());
+    }
+
+    IEnumerator Die_cartoon()
+    {
+        this.gameObject.SetActive(false);
+        yield return new WaitForSeconds(0.1f);
+        this.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        this.gameObject.SetActive(false);
+        yield return new WaitForSeconds(0.1f);
+    }
+
+    public void Start_Die_cartoon()
+    {
+        StartCoroutine(Die_cartoon());
     }
 }

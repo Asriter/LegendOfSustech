@@ -1,16 +1,19 @@
 ﻿//一次答辩用，输出
 public class MvpTemp : Character
 {
-    public MvpTemp() : base(2600, 3000, 15, 5)
+    public MvpTemp() : base(2600, 3000, 15, 5, 300)
     {
         this.id = 1;
+        
     }
 
-    protected override int Skill()
+    public override int Skill(bool isCritic)
     {
         double atk = Count_atk();
         double damage = Count_damage(2 * atk);
-        Get_target().Defense(damage);
+        if(isCritic)
+            damage *= 2;
+        Get_target(true)[0].Defense(damage);
         return 1;
     }
 
@@ -18,7 +21,7 @@ public class MvpTemp : Character
     {
     }
     
-    public override void Attack_cartoon()
+    /*public override void Attack_cartoon()
     {
     }
 
@@ -28,5 +31,5 @@ public class MvpTemp : Character
 
     public override void Die_cartoon()
     {
-    }
+    }*/
 }
