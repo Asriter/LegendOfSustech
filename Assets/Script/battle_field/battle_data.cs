@@ -29,7 +29,11 @@ public class battle_data
     {
         //初始化list
         characterList = new Character[2, 3, 3];
-        characterListRemember = new int[2,3,3];
+        characterListRemember = new int[2, 3, 3];
+
+        //先定义两个list用来装双方的单位，方便遍历
+        List<Character> myList = new List<Character>();
+        List<Character> opList = new List<Character>();
 
         //读取数据并加载到list中
         foreach (int[] property in myCharacterList)
@@ -41,7 +45,10 @@ public class battle_data
             characterListRemember[0, property[1], property[2]] = 1;
             //在单位中加入所在的location
             characterList[0, property[1], property[2]].SetLocation(new Vector3Int(0, property[1], property[2]));
-            
+
+            //加入该方法的list
+            myList.Add(characterList[0, property[1], property[2]]);
+
         }
         foreach (int[] property in opponentCharacterList)
         {
@@ -52,10 +59,55 @@ public class battle_data
             characterListRemember[1, property[1], property[2]] = 1;
             //在单位中加入所在的location
             characterList[1, property[1], property[2]].SetLocation(new Vector3Int(1, property[1], property[2]));
+            //加入该方法的list
+            opList.Add(characterList[1, property[1], property[2]]);
         }
-        
+
         //测试用
-        this.battleData = GenerateBattleData();
+        //this.battleData = GenerateBattleData();
+        this.battleData = GenerateBattleData(myList, opList);
+    }
+
+    //尝试另一种实现方式
+    private List<List<int>> GenerateBattleData(List<Character> myList, List<Character> opList)
+    {
+        battleData = new List<List<int>>();
+
+        //根据速度得到行动顺序，0是动，1是对方动
+        //每次得到data之后都会取反
+        int isAttack = GetSpeed();
+
+        int[] myIndex = { -1 };
+        int[] opIndex = { -1 };
+
+        //模拟战斗，得到battledata
+        while (true)
+        {
+            Character atkCharacter = null;
+            //我方动
+            if (isAttack == 0)
+            {
+                atkCharacter = FindActionCharacter(myList, myIndex);
+                isAttack = 1;
+            }
+            //对方动
+            else
+            {
+                atkCharacter = FindActionCharacter(opList, opIndex);
+                isAttack = 0;
+            }
+
+            if (!flag)
+            {
+                //Debug.Log("ListLength: " + battleData.Count);
+                return battleData;
+            }
+
+            //没打完
+            List<int> list = atkCharacter.Action(this);
+            //Debug.Log(list);
+            battleData.Add(list);
+        }
     }
 
     private List<List<int>> GenerateBattleData()
@@ -73,6 +125,8 @@ public class battle_data
         //模拟战斗，得到battledata
         while (true)
         {
+            int[] myIndex = { -1 };
+            int[] opIndex = { -1 };
             Character atkCharacter = null;
             //我方动
             if (isAttack == 0)
@@ -87,7 +141,6 @@ public class battle_data
                 isAttack = 0;
             }
 
-            //打完之后
             if (!flag)
             {
                 //Debug.Log("ListLength: " + battleData.Count);
@@ -95,10 +148,37 @@ public class battle_data
             }
 
             //没打完
-            List<int> list = atkCharacter.Action(this); 
+            List<int> list = atkCharacter.Action(this);
             //Debug.Log(list);
             battleData.Add(list);
         }
+    }
+
+    //尝试另一种实现方式
+    private Character FindActionCharacter(List<Character> list, int[] index)
+    {
+        flag = false;
+
+        for (int i = index[0] + 1; i < list.Count; i++)
+        {
+            if (list[i].GetHp() <= 0)
+                continue;
+
+            flag = true;
+            index[0] = i;
+            return list[i];
+        }
+
+        for (int i = 0; i <= index[0]; i++)
+        {
+            if (list[i].GetHp() <= 0)
+                continue;
+
+            flag = true;
+            index[0] = i;
+            return list[i];
+        }
+        return null;
     }
 
     //获取双方速度来决定谁先动，return 0我先动，1对方先动
@@ -112,7 +192,7 @@ public class battle_data
         {
             for (int y = 0; y < 3; y++)
             {
-                if (this.hasCharacterInGrid(0,x,y))
+                if (this.hasCharacterInGrid(0, x, y))
                 {
                     count1 += 1;
                     mySpeed += characterList[0, x, y]._speed;
@@ -139,7 +219,7 @@ public class battle_data
         {
             for (int x = 0; x < 3; x++)
             {
-                if (y*3+x <= ActionNum[0]+ActionNum[1]*3)
+                if (y * 3 + x <= ActionNum[0] + ActionNum[1] * 3)
                     continue;
                 //找到在当前位置之后且不为空的对象
                 if (this.hasCharacterInGrid(isAttack, x, y))
@@ -165,7 +245,7 @@ public class battle_data
             {
                 for (int x = 0; x < 3; x++)
                 {
-                    if (y*3+x > ActionNum[0]+ActionNum[1]*3)
+                    if (y * 3 + x > ActionNum[0] + ActionNum[1] * 3)
                         break;
                     //找到在当前位置之后且不为空的对象
                     if (this.hasCharacterInGrid(isAttack, x, y))
