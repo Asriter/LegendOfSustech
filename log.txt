@@ -1,3 +1,7 @@
+10.29 11:35
+controller和battledata的些许修改
+还是有bug
+
 10.29 1.54
 实现了controller和battledata的获取
 实现了最简单的动画
