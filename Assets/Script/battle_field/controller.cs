@@ -83,7 +83,7 @@ public class controller : MonoBehaviour
                         //加载prefab
                         GameObject obj = Resources.Load("Prefabs/character/" + id) as GameObject;
                         obj = Instantiate(obj);
-                        Debug.Log(obj.GetComponent<Character>().GetInstanceID());
+                        //Debug.Log(obj.GetComponent<Character>().GetInstanceID());
                         obj.SetActive(false);
                         GridUnit grid = GetGridUnitByVector3(new Vector3Int(i, x, y));//获取对应格子
                         obj.transform.SetParent(CharacterTransform);//设置位置
@@ -133,9 +133,10 @@ public class controller : MonoBehaviour
     {
         Character[,,] characterList = battleData.GetCharacterList();
         yield return new WaitForSeconds(0.5f);
+        Debug.Log(battleData.GetBattleData().Count);
         foreach (List<int> list in battleData.GetBattleData())
         {
-            Debug.Log(list[0] + " " + list[1] + " " + list[2]);
+            //Debug.Log("该条战斗信息:" + list[0] + " " + list[1] + " " + list[2] + " " + list[3] + " " + list[4]);
             
             //是否使用技能
             bool isSkill = list[3] == 1 ? true : false;
