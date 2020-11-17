@@ -68,7 +68,7 @@ public class battle_data
         this.battleData = GenerateBattleData(myList, opList);
     }
 
-    //尝试另一种实现方式
+    //尝试另一种实现方式，生成battleData
     private List<List<int>> GenerateBattleData(List<Character> myList, List<Character> opList)
     {
         battleData = new List<List<int>>();

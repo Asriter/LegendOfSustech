@@ -49,6 +49,7 @@ public abstract class Character : MonoBehaviour
     {
         Vector3Int location = Get_location();
         this.battleData = battleData;
+        _msg = new List<int>();
         _msg.Clear();
         _msg.Add(location.x);
         _msg.Add(location.y);
@@ -67,6 +68,7 @@ public abstract class Character : MonoBehaviour
         }
 
         Check_buff_remain(); //skill后怒气归零
+        //Debug.Log("攻击对象" + _msg[0] + " " + _msg[1] + " " + _msg[2] + " " + "技能：" + _msg[3] + " 暴击：" + _msg[4]);
         return _msg;
     }
 
@@ -109,8 +111,10 @@ public abstract class Character : MonoBehaviour
         double damage = Count_damage(atk);
         //damage = this.Count_critic(damage);
         //是否暴击
-        if(isCritic)
+        if(isCritic){
             damage *= 2;
+            //Debug.Log("发生暴击");
+        }
         Get_target(false)[0].Defense(damage);
         return damage;
     }
@@ -194,6 +198,7 @@ public abstract class Character : MonoBehaviour
     public void Defense(double damage)
     {
         _hp = Math.Max(0, _hp - Count_Hurt(damage));
+        //Debug.Log("血量：" + _hp + " 伤害：" + Count_Hurt(damage));
         if (_hp == 0)
         {
             Die();
