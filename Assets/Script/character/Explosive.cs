@@ -22,6 +22,7 @@ public class Explosive : Character
     {
         _hp = 0;
         Die();
+        base.Skill(isCritic);
         return 1;
     }
 

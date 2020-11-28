@@ -1,3 +1,12 @@
+11/29 0:20
+！！！！！！！！！！由于在下实在不太会玩GitHub，所以只是简单将几个新增的class Copy了出来，有问题再调！！！！！！！！！
+修改了些许character中的内容，注意之后重写skill的时候记得在最后加上base.skill()
+稍微修改Battlefield的UI
+加了血条
+修改character的prefab的结构
+略微修改Controller，具体为在调用的时候从直接找gameObject变成了找他爹
+加了sceneData，计划用于之后改变scene后通过其储存数据
+
 10.29 11:35
 controller和battledata的些许修改
 还是有bug
