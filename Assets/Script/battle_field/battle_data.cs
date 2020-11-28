@@ -23,6 +23,50 @@ public class battle_data
 
     private bool isWin;
 
+    //用于在得到了数据之后直接创建一个BattleData，不用计算结果
+    public battle_data(List<int[]> myCharacterList, List<int[]> opponentCharacterList, List<List<int>> battleData)
+    {
+        //初始化list
+        characterList = new Character[2, 3, 3];
+        characterListRemember = new int[2, 3, 3];
+
+        //先定义两个list用来装双方的单位，方便遍历
+        List<Character> myList = new List<Character>();
+        List<Character> opList = new List<Character>();
+
+        //读取数据并加载到list中
+        foreach (int[] property in myCharacterList)
+        {
+            characterList[0, property[1], property[2]] = CharacterFactory.CreateCharacter(property[0]);
+            //暂时不写属性操控方法
+
+            //在remember中记录
+            characterListRemember[0, property[1], property[2]] = 1;
+            //在单位中加入所在的location
+            characterList[0, property[1], property[2]].SetLocation(new Vector3Int(0, property[1], property[2]));
+
+            //加入该方法的list
+            myList.Add(characterList[0, property[1], property[2]]);
+
+        }
+        foreach (int[] property in opponentCharacterList)
+        {
+            characterList[1, property[1], property[2]] = CharacterFactory.CreateCharacter(property[0]);
+            //暂时不写属性操控方法
+
+            //在remember中记录
+            characterListRemember[1, property[1], property[2]] = 1;
+            //在单位中加入所在的location
+            characterList[1, property[1], property[2]].SetLocation(new Vector3Int(1, property[1], property[2]));
+            //加入该方法的list
+            opList.Add(characterList[1, property[1], property[2]]);
+        }
+
+        //测试用
+        //this.battleData = GenerateBattleData();
+        this.battleData = battleData;
+    }
+
     //传来的参数为两个List，每个List中都是长度为7的int数组
     //id, x, y, hp, atk, def, cri
     public battle_data(List<int[]> myCharacterList, List<int[]> opponentCharacterList)

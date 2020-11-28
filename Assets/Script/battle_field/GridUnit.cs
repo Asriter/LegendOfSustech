@@ -17,7 +17,7 @@ public class GridUnit : MonoBehaviour
     public void initial()
     {
         //调颜色，测试用，可删
-        tileRenderer.color = new Color(0, 0, 200, 0.3f);
+        tileRenderer.color = new Color(0, 0, 0, 0.3f);
         //清空character
         character = null;
     }
@@ -25,7 +25,7 @@ public class GridUnit : MonoBehaviour
     public void initial(Vector3Int location)
     {
         //调颜色，测试用，可删
-        tileRenderer.color = new Color(0, 0, 200, 0.3f);
+        tileRenderer.color = new Color(0, 0, 0, 0.3f);
         //清空character
         character = null;
 
