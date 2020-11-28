@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-public abstract class Buff
+public class Buff
 {
     public BuffKind _buffKind;
     private double _amount; //效果量：数值或者百分比
@@ -35,6 +35,7 @@ public enum BuffKind
     Damage,
     GainDamage,
     Heal,
-    GainHeal
+    GainHeal,
+    Taunt
 }
 //TODO： 更多的buff……

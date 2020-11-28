@@ -8,6 +8,7 @@ public class controller : MonoBehaviour
 {
     //通过control.Instance 直接调用这个自动实例化好了的class中的内容
     private static controller instance;
+
     public static controller Instance
     {
         get
@@ -29,23 +30,22 @@ public class controller : MonoBehaviour
      */
 
     [SerializeField] List<GridUnit> gridUnits;
+
     //GridUnit[,,] gridUnits = new GridUnit[2,3,3];
     [SerializeField] Transform CharacterTransform;
 
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
     void Update()
     {
-
     }
 
     //初始化controller
-    public void Initial(battle_data battleData)//battle_data battleData)
+    public void Initial(battle_data battleData) //battle_data battleData)
     {
         //清空gridunits中所有格子里的单位
         for (int i = 0; i < 2; i++)
@@ -85,8 +85,8 @@ public class controller : MonoBehaviour
                         obj = Instantiate(obj);
                         //Debug.Log(obj.GetComponent<Character>().GetInstanceID());
                         obj.SetActive(false);
-                        GridUnit grid = GetGridUnitByVector3(new Vector3Int(i, x, y));//获取对应格子
-                        obj.transform.SetParent(CharacterTransform);//设置位置
+                        GridUnit grid = GetGridUnitByVector3(new Vector3Int(i, x, y)); //获取对应格子
+                        obj.transform.SetParent(CharacterTransform); //设置位置
                         //设置位置测试
                         obj.transform.position = grid.gameObject.transform.position;
 
@@ -95,7 +95,7 @@ public class controller : MonoBehaviour
                         //往格子里加单位
                         grid.SetCharacter(battleData.GetCharacterList()[i, x, y]);
                         //设置character中自己的坐标
-                        battleData.GetCharacterList()[i, x, y].SetLocation(new Vector3Int(i,x,y));
+                        battleData.GetCharacterList()[i, x, y].SetLocation(new Vector3Int(i, x, y));
                     }
                 }
             }
@@ -105,7 +105,6 @@ public class controller : MonoBehaviour
     //添加调用prefab
     private void SetPrefabsActive()
     {
-
         //显示
         for (int i = 0; i < 2; i++)
         {
@@ -137,7 +136,7 @@ public class controller : MonoBehaviour
         foreach (List<int> list in battleData.GetBattleData())
         {
             //Debug.Log("该条战斗信息:" + list[0] + " " + list[1] + " " + list[2] + " " + list[3] + " " + list[4]);
-            
+
             //是否使用技能
             bool isSkill = list[3] == 1 ? true : false;
 
@@ -145,7 +144,10 @@ public class controller : MonoBehaviour
             List<Character> targets = characterList[list[0], list[1], list[2]].Get_target(isSkill);
 
             //播放攻击动画
-            characterList[list[0], list[1], list[2]].Start_Attack_cartoon(targets);
+            if (isSkill)
+                characterList[list[0], list[1], list[2]].Start_Skill_cartoon(targets);
+            else
+                characterList[list[0], list[1], list[2]].Start_Attack_cartoon(targets);
             yield return new WaitForSeconds(0.5f);
 
             //播放防御动画
@@ -153,6 +155,7 @@ public class controller : MonoBehaviour
             {
                 c.Start_Defense_cartoon();
             }
+
             yield return new WaitForSeconds(0.5f);
 
             //攻击部分
@@ -160,12 +163,13 @@ public class controller : MonoBehaviour
             bool isCritic = list[4] == 1 ? true : false;
             //攻击类型，技能还是平A
             //血条动画在character的defence中实现
-            if (list[3] == 0)//A
+            if (list[3] == 0) //A
             {
                 characterList[list[0], list[1], list[2]].Attack(isCritic);
             }
             else
-            {//skill
+            {
+                //skill
                 characterList[list[0], list[1], list[2]].Skill(isCritic);
             }
 
@@ -180,7 +184,7 @@ public class controller : MonoBehaviour
                         //该位置的单位不为空
                         if (battleData.hasCharacterInGrid(i, x, y))
                         {
-                            if(characterList[i, x, y].GetHp() <= 0 && characterList[i, x, y].gameObject.activeSelf)
+                            if (characterList[i, x, y].GetHp() <= 0 && characterList[i, x, y].gameObject.activeSelf)
                             {
                                 characterList[i, x, y].Start_Die_cartoon();
                                 hasDie = true;
@@ -191,11 +195,12 @@ public class controller : MonoBehaviour
             }
 
             //有人死和没人死暂停的时间不同
-            if(hasDie)
+            if (hasDie)
                 yield return new WaitForSeconds(0.4f);
             else
                 yield return new WaitForSeconds(0.1f);
         }
+
         yield return new WaitForSeconds(0f);
     }
 
@@ -205,6 +210,4 @@ public class controller : MonoBehaviour
         int index = location.x * 9 + location.y * 3 + location.z;
         return gridUnits[index];
     }
-
-
 }
