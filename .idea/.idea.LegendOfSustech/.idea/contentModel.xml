@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\ASUS\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\ASUS\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_LegendOfSustech.-1056108544.00" t="ExcludeRecursive" />
+    <e p="F:\学习\作业\LegendOfSustech" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="Script" t="Include">
+          <e p="battle_field" t="Include">
+            <e p="battle_data.cs" t="Include" />
+            <e p="BattleCreater.cs" t="Include" />
+            <e p="controller.cs" t="Include" />
+            <e p="GridUnit.cs" t="Include" />
+            <e p="Main.cs" t="Include" />
+          </e>
+          <e p="character" t="Include">
+            <e p="Buff.cs" t="Include" />
+            <e p="Character.cs" t="Include" />
+            <e p="CharacterFactory.cs" t="Include" />
+            <e p="Explosive.cs" t="Include" />
+            <e p="Linkage.cs" t="Include" />
+            <e p="MvpTemp.cs" t="Include" />
+            <e p="Paladin.cs" t="Include" />
+            <e p="TankTemp.cs" t="Include" />
+            <e p="Taunter.cs" t="Include" />
+            <e p="WarriorTemp.cs" t="Include" />
+          </e>
+          <e p="constant.cs" t="Include" />
+        </e>
+      </e>
+      <e p="LegendOfSustech.sln" t="IncludeFlat" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp\bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
