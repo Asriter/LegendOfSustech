@@ -9,7 +9,7 @@ using Random = System.Random;
 //一次答辩用，输出
 public class MvpTemp : Character
 {
-    public MvpTemp() : base(2600, 3000, 15, 5, 300)
+    public MvpTemp() : base(2600, 3000, 15, 5, 300, 1)
     {
         this.id = 1;
         

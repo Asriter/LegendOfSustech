@@ -9,7 +9,7 @@ using Random = System.Random;
 //一次答辩用，坦克
 public class TankTemp : Character
 {
-    public TankTemp() : base(3600, 1000, 40, 5, 300)
+    public TankTemp() : base(3600, 1000, 40, 5, 300, 1)
     {
         this.id = 2;
     }
