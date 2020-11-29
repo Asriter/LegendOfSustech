@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = System.Random;
 
 public abstract class Character : MonoBehaviour
@@ -26,8 +27,6 @@ public abstract class Character : MonoBehaviour
     private List<int> _msg; //报文
     private Vector3Int location; //在那个格子里
     protected int id; //用于实例化之后的单位，通过id获取对应对象
-    public readonly int _cost; //费用
-
     //TODO 可否调用动画，该选项存疑暂不使用
     //public bool isAnimation = false;
 
@@ -266,34 +265,6 @@ public abstract class Character : MonoBehaviour
         return false;
     }
 
-    //计算实际攻击力
-    protected double Count_atk()
-    {
-        double atk = _atk;
-        atk = Buff_affect(atk, BuffKind.Atk); //根据buff增减攻击力
-        return atk;
-    }
-
-    //计算理论伤害值
-    protected double Count_damage(double damage)
-    {
-        damage = Buff_affect(damage, BuffKind.Damage); //根据buff增减伤害
-        return damage;
-    }
-
-    //计算暴击
-    public bool Count_critic()
-    {
-        if (new Random().NextDouble() <= _critic / 100)
-        {
-            _msg.Add(1);
-            return true;
-        }
-
-        _msg.Add(0);
-        return false;
-    }
-
     //计算实际伤害值
     protected double Count_Hurt(double damage)
     {
@@ -388,11 +359,11 @@ public abstract class Character : MonoBehaviour
     //调用时传入攻击目标，用于后期实现更多动画
     IEnumerator Skill_cartoon(List<Character> target)
     {
-        this.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 0, 255, 1f);
+        this.gameObject.GetComponent<Image>().color = new Color(0, 0, 255, 1f);
         this.gameObject.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
         yield return new WaitForSeconds(0.3f);
         this.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
-        this.gameObject.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 1f);
+        this.gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 1f);
         yield return new WaitForSeconds(0.1f);
     }
 
@@ -404,9 +375,9 @@ public abstract class Character : MonoBehaviour
 
     IEnumerator Defense_cartoon()
     {
-        this.gameObject.GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 1f);
+        this.gameObject.GetComponent<Image>().color = new Color(255, 0, 0, 1f);
         yield return new WaitForSeconds(0.3f);
-        this.gameObject.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 1f);
+        this.gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 1f);
         yield return new WaitForSeconds(0.1f);
     }
 
@@ -418,11 +389,11 @@ public abstract class Character : MonoBehaviour
 
     IEnumerator Die_cartoon()
     {
-        this.gameObject.SetActive(false);
+        this.gameObject.transform.parent.gameObject.SetActive(false);
         yield return new WaitForSeconds(0.1f);
-        this.gameObject.SetActive(true);
+        this.gameObject.transform.parent.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.1f);
-        this.gameObject.SetActive(false);
+        this.gameObject.transform.parent.gameObject.SetActive(false);
         yield return new WaitForSeconds(0.1f);
     }
 
