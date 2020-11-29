@@ -3,8 +3,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = System.Random;
@@ -15,11 +13,17 @@ public abstract class Character : MonoBehaviour
     public readonly double _maxHp; //最大生命值
     public double _hp; //当前生命
     public int _mp = 50; //蓝量，满蓝放技能
-    private readonly double _atk; //攻击力
-    private readonly double _def; //防御
-    private readonly double _critic; //暴击率，5表示5%暴击率
-    public readonly double _speed;
+    public readonly double _atk; //攻击力
+    public readonly double _def; //防御
+    public readonly double _critic; //暴击率，5表示5%暴击率
     private List<Buff> _buffs; //rt
+
+    protected int _atkMp = 50; //普攻增加的怒气
+    protected int _skillMp = 100; //大招所需怒气
+
+    public readonly double _speed; //速度
+    public readonly int _cost; //费用
+
     private List<int> _msg; //报文
     private Vector3Int location; //在那个格子里
     protected int id; //用于实例化之后的单位，通过id获取对应对象
@@ -28,12 +32,12 @@ public abstract class Character : MonoBehaviour
     //public bool isAnimation = false;
 
     //TODO在调用action的时候传入，可能加入set
-    private battle_data battleData;
+    protected battle_data battleData;
 
     //待添加
 
     //构造器,里面不放参数，参数修改放到下面的initial里面,调用perfab的时候不知道会不会加载构造函数
-    protected Character(double hp, double atk, double def, double critic, double speed)
+    protected Character(double hp, double atk, double def, double critic, double speed, int cost)
     {
         _maxHp = hp;
         _hp = hp;
@@ -43,10 +47,15 @@ public abstract class Character : MonoBehaviour
         _speed = speed;
         _buffs = new List<Buff>();
         _msg = new List<int>();
+        _cost = cost;
     }
 
+    /*
+     *    以下为能够被重载的方法
+     */
+
     //行动，轮到角色行动时调用此方法
-    public List<int> Action(battle_data battleData)
+    public virtual List<int> Action(battle_data battleData)
     {
         Vector3Int location = Get_location();
         this.battleData = battleData;
@@ -55,23 +64,144 @@ public abstract class Character : MonoBehaviour
         _msg.Add(location.x);
         _msg.Add(location.y);
         _msg.Add(location.z);
-        if (_mp < 100) //怒气小于100普攻，否则skill
+
+        //检测沉默
+        bool silent = false;
+        foreach (Buff buff in _buffs)
+        {
+            if (buff._buffKind == BuffKind.Silence)
+            {
+                silent = true;
+                break;
+            }
+        }
+
+        if (_mp < _skillMp || silent) //怒气小于100或沉默状态下普攻，否则skill
         {
             _msg.Add(0);
             Attack(Count_critic());
-            //Modify_mp(50); //普攻怒气加25
         }
         else
         {
             _msg.Add(1);
             Skill(Count_critic());
-            //Modify_mp(0);
         }
 
-        //Check_buff_remain(); //skill后怒气归零
-        //Debug.Log("攻击对象" + _msg[0] + " " + _msg[1] + " " + _msg[2] + " " + "技能：" + _msg[3] + " 暴击：" + _msg[4]);
+        Check_buff_remain(); //减少buff持续时间1回合
         return _msg;
     }
+
+    //用于通常攻击，在攻击完成之后返回状态值，让主程序继续运行
+    //将返回状态值修改成返回伤害
+    public virtual double Attack(bool isCritic)
+    {
+        Modify_mp(_atkMp);
+        double atk = Count_atk();
+        double damage = Count_damage(atk);
+        
+        //是否暴击
+        if (isCritic)
+        {
+            damage *= 2;
+            //Debug.Log("发生暴击");
+        }
+
+        Get_target(false)[0].Defense(damage);
+        return damage;
+    }
+
+    //受攻击，调用动画、效果等
+    public virtual void Defense(double damage)
+    {
+        _hp = Math.Max(0, _hp - Count_Hurt(damage));
+        //Debug.Log("血量：" + _hp + " 伤害：" + Count_Hurt(damage));
+        if (_hp == 0)
+        {
+            Die();
+        }
+    }
+    
+    //获取攻击目标
+    //一般来说isskill没什么用，但如果技能和平A攻击范围不同时有用
+    //面对范围攻击的情况，此处返回值修改为list
+    public virtual List<Character> Get_target(bool skill)
+    {
+        List<Character> list = new List<Character>();
+
+        Vector3Int location = Get_location();
+        //设置battleData
+        if (battleData == null)
+            battleData = controller.Instance.battleData;
+        Character[,,] enemies = battleData.GetCharacterList();
+        Character enemy;
+        int enemyGroup = location[0] == 0 ? 1 : 0;
+
+        //检测嘲讽
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (!battleData.hasCharacterInGrid(enemyGroup, i, j))
+                    continue;
+                enemy = enemies[enemyGroup, i, j];
+                if (enemy._hp > 0)
+                {
+                    //检测嘲讽
+                    foreach (Buff buff in enemy._buffs)
+                    {
+                        if (buff._buffKind == BuffKind.Taunt)
+                        {
+                            list.Add(enemy);
+                            return list;
+                        }
+                    }
+                }
+            }
+        }
+
+        //优先打本列的
+        for (int i = 0; i < 3; i++)
+        {
+            //检测当前位置有没有东西
+            if (!battleData.hasCharacterInGrid(enemyGroup, location.y, i))
+                continue;
+            enemy = enemies[enemyGroup, location.y, i];
+            if (enemy._hp > 0)
+            {
+                list.Add(enemy);
+                return list;
+            }
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (i != location.y)
+                for (int j = 0; j < 3; j++)
+                {
+                    //检测当前位置有没有东西
+                    if (!battleData.hasCharacterInGrid(enemyGroup, i, j))
+                        continue;
+                    enemy = enemies[enemyGroup, i, j];
+                    if (enemy._hp > 0)
+                    {
+                        list.Add(enemy);
+                        return list;
+                    }
+                }
+        }
+
+        return null;
+    }
+
+    //治疗
+    public virtual double Heal(double amount)
+    {
+        return Buff_affect(amount, BuffKind.Heal);
+    }
+
+    /*
+     *    以下为不会被重载的方法
+     */
 
     public Vector3Int Get_location()
     {
@@ -85,6 +215,7 @@ public abstract class Character : MonoBehaviour
         {
             _mp += amount;
             _mp = Math.Min(100, _mp); //怒气最高为100
+            _mp = Math.Max(0, _mp); //怒气最低为0
         }
         else
             _mp = 0;
@@ -104,23 +235,6 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    //用于通常攻击，在攻击完成之后返回状态值，让主程序继续运行
-    //将返回状态值修改成返回伤害
-    public double Attack(bool isCritic)
-    {
-        Modify_mp(50); //普攻怒气加25
-        double atk = Count_atk();
-        double damage = Count_damage(atk);
-        //damage = this.Count_critic(damage);
-        //是否暴击
-        if(isCritic){
-            damage *= 2;
-            //Debug.Log("发生暴击");
-        }
-        Get_target(false)[0].Defense(damage);
-        return damage;
-    }
-
     //计算实际攻击力
     protected double Count_atk()
     {
@@ -135,9 +249,9 @@ public abstract class Character : MonoBehaviour
         damage = Buff_affect(damage, BuffKind.Damage); //根据buff增减伤害
         return damage;
     }
-
+    
     //计算暴击
-    protected bool Count_critic()
+    public bool Count_critic()
     {
         if (new Random().NextDouble() <= _critic / 100)
         {
@@ -147,64 +261,6 @@ public abstract class Character : MonoBehaviour
 
         _msg.Add(0);
         return false;
-    }
-
-    //获取攻击目标
-    //一般来说isskill没什么用，但如果技能和平A攻击范围不同时有用
-    //面对范围攻击的情况，此处返回值修改为list
-    public List<Character> Get_target(bool skill) //TODO
-    {
-        List<Character> list = new List<Character>();
-
-        Vector3Int location = Get_location();
-        //设置battleData
-        if(battleData == null)
-            battleData = controller.Instance.battleData;
-        Character[,,] enemies = battleData.GetCharacterList();
-        Character enemy;
-        int enemyGroup = location[0] == 0? 1 : 0;
-        for (int i = 0; i < 3; i++)
-        {
-            //检测当前位置有没有东西
-            if(!battleData.hasCharacterInGrid(enemyGroup, location.y, i))
-                continue;
-            enemy = enemies[enemyGroup, location.y, i];
-            if (enemy._hp > 0)
-            {
-                list.Add(enemy);
-                return list;
-            }
-        }
-
-        for (int i = 0; i < 3; i++)
-        {
-            if (i != location.y)
-                for (int j = 0; j < 3; j++)
-                {
-                    //检测当前位置有没有东西
-                    if(!battleData.hasCharacterInGrid(enemyGroup, i, j))
-                        continue;
-                    enemy = enemies[enemyGroup, i, j];
-                    if (enemy._hp > 0)
-                    {
-                        list.Add(enemy);
-                        return list;
-                    }
-                }
-        }
-
-        return null;
-    }
-
-    //受攻击，调用动画、效果等
-    public void Defense(double damage)
-    {
-        _hp = Math.Max(0, _hp - Count_Hurt(damage));
-        //Debug.Log("血量：" + _hp + " 伤害：" + Count_Hurt(damage));
-        if (_hp == 0)
-        {
-            Die();
-        }
     }
 
     //计算实际伤害值
@@ -257,8 +313,7 @@ public abstract class Character : MonoBehaviour
     //释放技能，该部分根据各个单位的子类具体实现
     public virtual int Skill(bool isCritic)
     {
-        Modify_mp(0);
-        Check_buff_remain(); //skill后怒气归零
+        Modify_mp(0); //skill后怒气归零
         return 1;
     }
 
@@ -278,7 +333,9 @@ public abstract class Character : MonoBehaviour
     }
 
     //退场动画，效果等
-    protected abstract void Die();
+    protected virtual void Die()
+    {
+    }
 
     //暂时用于演示demo，后续加细节
     //调用时传入攻击目标，用于后期实现更多动画
@@ -296,7 +353,7 @@ public abstract class Character : MonoBehaviour
         StartCoroutine(Attack_cartoon(target));
     }
 
-        //暂时用于演示demo，后续加细节
+    //暂时用于演示demo，后续加细节
     //调用时传入攻击目标，用于后期实现更多动画
     IEnumerator Skill_cartoon(List<Character> target)
     {

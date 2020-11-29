@@ -9,7 +9,7 @@ using Random = System.Random;
 //一次答辩用，输出
 public class MvpTemp : Character
 {
-    public MvpTemp() : base(2600, 3000, 15, 5, 300)
+    public MvpTemp() : base(2600, 3000, 15, 5, 300, 1)
     {
         this.id = 1;
         
@@ -26,12 +26,7 @@ public class MvpTemp : Character
             damage *= 2;
         }
         Get_target(true)[0].Defense(damage);
-        base.Skill(isCritic);
-        return 1;
-    }
-
-    protected override void Die()
-    {
+        return base.Skill(isCritic);
     }
     
     /*public override void Attack_cartoon()

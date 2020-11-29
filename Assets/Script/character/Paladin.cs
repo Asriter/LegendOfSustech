@@ -1,6 +1,6 @@
 ﻿using Random = System.Random;
 
-public class Paladin : Character
+public class Paladin : Character //奶骑
 {
     public Paladin() : base(4500, 1200, 30, 5, 300, 1)
     {
@@ -30,7 +30,6 @@ public class Paladin : Character
         Get_target(true)[0].Defense(damage);
         
         Get_heal(2 * atk);
-        base.Skill(isCritic);
-        return 1;
+        return base.Skill(isCritic);
     }
 }

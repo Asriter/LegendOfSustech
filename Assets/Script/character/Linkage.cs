@@ -2,7 +2,7 @@
 using UnityEngine;
 using Random = System.Random;
 
-public class Linkage : Character
+public class Linkage : Character //联动 TODO 有bug,引用错误
 {
     public Linkage() : base(4000, 500, 40, 5, 300, 1)
     {
@@ -89,7 +89,6 @@ public class Linkage : Character
             character.Get_buff(new Buff(BuffKind.Def, 50, true, 1));
         }
 
-        base.Skill(isCritic);
-        return 1;
+        return base.Skill(isCritic);
     }
 }

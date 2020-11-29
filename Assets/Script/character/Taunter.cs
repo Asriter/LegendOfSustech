@@ -26,8 +26,7 @@ public class Taunter : Character //嘲讽盾
         
         Get_buff(new Buff(BuffKind.Taunt, 0, false, 1));
 
-        base.Skill(isCritic);
-        return 1;
+        return base.Skill(isCritic);
     }
 
     public override List<Character> Get_target(bool skill)
