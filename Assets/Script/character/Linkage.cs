@@ -89,6 +89,7 @@ public class Linkage : Character
             character.Get_buff(new Buff(BuffKind.Def, 50, true, 1));
         }
 
+        base.Skill(isCritic);
         return 1;
     }
 }

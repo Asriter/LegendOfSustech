@@ -9,7 +9,7 @@ using Random = System.Random;
 //一次答辩用，战士/辅助
 public class WarriorTemp : Character
 {
-    public WarriorTemp() : base(2500, 1750, 30, 5, 300, 1)
+    public WarriorTemp() : base(2500, 1750, 30, 5, 300)
     {
         this.id = 3;
     }
@@ -24,7 +24,12 @@ public class WarriorTemp : Character
             damage *= 2;
         }
         Get_target(true)[0].Defense(damage);
+        base.Skill(isCritic);
         return 1;
+    }
+
+    protected override void Die()
+    {
     }
 
     /*public override void Attack_cartoon()
