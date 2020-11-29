@@ -89,6 +89,7 @@ public class Linkage : Character //联动 TODO 有bug,引用错误
             character.Get_buff(new Buff(BuffKind.Def, 50, true, 1));
         }
 
+        base.Skill(isCritic);
         return 1;
     }
 }

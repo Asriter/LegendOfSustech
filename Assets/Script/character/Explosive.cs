@@ -22,6 +22,7 @@ public class Explosive : Character //自爆卡车
     {
         _hp = 0;
         Die();
+        base.Skill(isCritic);
         return 1;
     }
 
