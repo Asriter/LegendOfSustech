@@ -144,13 +144,6 @@ public class controller : MonoBehaviour
             //获取攻击目标
             List<Character> targets = characterList[list[0], list[1], list[2]].Get_target(isSkill);
 
-            //播放攻击动画
-            if(isSkill)
-                characterList[list[0], list[1], list[2]].Start_Skill_cartoon(targets);
-            else
-                characterList[list[0], list[1], list[2]].Start_Attack_cartoon(targets);
-            yield return new WaitForSeconds(0.5f);
-
             //攻击部分
             //是否暴击
             bool isCritic = list[4] == 1 ? true : false;
@@ -165,12 +158,29 @@ public class controller : MonoBehaviour
                 characterList[list[0], list[1], list[2]].Skill(isCritic);
             }
 
+            //调整蓝条
+            characterList[list[0], list[1], list[2]].gameObject.transform.parent.gameObject.
+            GetComponentInChildren<HP_MP_Bar>().setMP();
+
+            //播放攻击动画
+            if(isSkill)
+                characterList[list[0], list[1], list[2]].Start_Skill_cartoon(targets);
+            else
+                characterList[list[0], list[1], list[2]].Start_Attack_cartoon(targets);
+            yield return new WaitForSeconds(0.5f);
+
             //播放防御动画
             foreach (Character c in targets)
             {
                 c.Start_Defense_cartoon();
             }
             yield return new WaitForSeconds(0.5f);
+            //调整蓝条
+            foreach(Character c in targets)
+            {
+                c.gameObject.transform.parent.gameObject.
+                GetComponentInChildren<HP_MP_Bar>().setHP();
+            }
 
             //检测死亡，播放动画
             bool hasDie = false;
@@ -183,8 +193,9 @@ public class controller : MonoBehaviour
                         //该位置的单位不为空
                         if (battleData.hasCharacterInGrid(i, x, y))
                         {
-                            if(characterList[i, x, y].GetHp() <= 0 && characterList[i, x, y].gameObject.activeSelf)
+                            if(characterList[i, x, y].GetHp() <= 0 && characterList[i, x, y].gameObject.transform.parent.gameObject.activeSelf)
                             {
+                                //Debug.Log(characterList[i, x, y].gameObject.activeSelf);
                                 characterList[i, x, y].Start_Die_cartoon();
                                 hasDie = true;
                             }

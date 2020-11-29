@@ -27,7 +27,6 @@ public abstract class Character : MonoBehaviour
     private List<int> _msg; //报文
     private Vector3Int location; //在那个格子里
     protected int id; //用于实例化之后的单位，通过id获取对应对象
-
     //TODO 可否调用动画，该选项存疑暂不使用
     //public bool isAnimation = false;
 
@@ -173,7 +172,10 @@ public abstract class Character : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < 3; i++)
+        //没有本列的，优先打近的那一列
+        for (int i = (location.y == 2 ? 2 : 0), step = (location.y == 2 ? -1 : 1);
+            i < 3 && i >= 0;
+            i += step)
         {
             if (i != location.y)
                 for (int j = 0; j < 3; j++)
