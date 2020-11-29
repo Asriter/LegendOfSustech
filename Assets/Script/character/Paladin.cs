@@ -30,7 +30,6 @@ public class Paladin : Character //奶骑
         Get_target(true)[0].Defense(damage);
         
         Get_heal(2 * atk);
-        base.Skill(isCritic);
-        return 1;
+        return base.Skill(isCritic);
     }
 }

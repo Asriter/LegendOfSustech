@@ -7,7 +7,6 @@ class CharacterFactory
         Character c = null;
         switch(id)
         {
-<<<<<<< HEAD
             case 1:  c = new MvpTemp();    break;
             case 2:  c = new TankTemp();   break;
             case 3:  c = new WarriorTemp();break;
@@ -32,12 +31,6 @@ class CharacterFactory
             case 22:                       break; // 人头狗
             case 23:                       break; // 投石机
             case 24:                       break; // 黑胡子
-
-=======
-            case 1: c = new MvpTemp();break;
-            case 2: c = new TankTemp();break;
-            case 3: c = new WarriorTemp();break;
->>>>>>> master
             default: Debug.Log("输入了错误的id，找不到对应单位"); break;
         }
 

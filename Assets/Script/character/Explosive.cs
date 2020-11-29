@@ -22,8 +22,7 @@ public class Explosive : Character //自爆卡车
     {
         _hp = 0;
         Die();
-        base.Skill(isCritic);
-        return 1;
+        return base.Skill(isCritic);
     }
 
     //死亡：炸全场1.5倍攻击力伤害，包括敌我（先计算敌方受伤）

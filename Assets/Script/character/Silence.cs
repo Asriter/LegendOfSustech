@@ -15,7 +15,7 @@ public class Silence : Character //沉默 TODO 被动未实现
         {
             enemy.Get_buff(new Buff(BuffKind.Silence, 0, false, 1));
         }
-        return 1;
+        return base.Skill(isCritic);
     }
 
     public override List<Character> Get_target(bool skill)

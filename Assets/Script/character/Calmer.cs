@@ -43,6 +43,6 @@ public class Calmer : Character //频繁减怒
         target.Defense(damage);
         target.Modify_mp(0);
 
-        return 1;
+        return base.Skill(isCritic);
     }
 }

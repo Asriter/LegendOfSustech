@@ -12,7 +12,9 @@
             <e p="BattleCreater.cs" t="Include" />
             <e p="controller.cs" t="Include" />
             <e p="GridUnit.cs" t="Include" />
+            <e p="HP_MP_Bar.cs" t="Include" />
             <e p="Main.cs" t="Include" />
+            <e p="SceneData.cs" t="Include" />
           </e>
           <e p="character" t="Include">
             <e p="Buff.cs" t="Include" />

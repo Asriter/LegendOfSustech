@@ -18,22 +18,22 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Assets/Script/battle_field/controller.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/Taunter.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/MvpTemp.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/Paladin.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/Linkage.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/TankTemp.cs" />
         <option value="$PROJECT_DIR$/Assets/Script/character/Buff.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/Explosive.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/Silence.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/GroupHealer.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/TaiChi.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/Calmer.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/CharacterFactory.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/Buffer.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/WarriorTemp.cs" />
-        <option value="$PROJECT_DIR$/Assets/Script/character/Character.cs" />
         <option value="$PROJECT_DIR$/Assets/Script/battle_field/Main.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/CharacterFactory.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/Character.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/Taunter.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/TankTemp.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/WarriorTemp.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/Silence.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/Paladin.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/MvpTemp.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/GroupHealer.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/Explosive.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/Calmer.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/TaiChi.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/Linkage.cs" />
+        <option value="$PROJECT_DIR$/Assets/Script/character/Buffer.cs" />
       </list>
     </option>
   </component>
@@ -79,6 +79,7 @@
       <workItem from="1606540610915" duration="13646000" />
       <workItem from="1606572685863" duration="2574000" />
       <workItem from="1606626627267" duration="11468000" />
+      <workItem from="1606654268197" duration="2583000" />
     </task>
     <servers />
   </component>

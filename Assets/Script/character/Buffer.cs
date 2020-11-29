@@ -56,7 +56,7 @@ public class Buffer : Character //加buff
             target.Get_buff(new Buff(BuffKind.Def, -20, false, 1));
         }
 
-        return 1;
+        return base.Skill(isCritic);
     }
     
     public override List<Character> Get_target(bool skill)

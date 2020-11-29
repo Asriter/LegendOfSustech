@@ -9,14 +9,13 @@ using Random = System.Random;
 //一次答辩用，坦克
 public class TankTemp : Character
 {
-    public TankTemp() : base(3600, 1000, 40, 5, 300)
+    public TankTemp() : base(3600, 1000, 40, 5, 300, 1)
     {
         this.id = 2;
     }
 
     public override int Skill(bool isCritic)
     {
-        Modify_mp(0);
         double atk = Count_atk();
         double damage = Count_damage(2 * atk);
         //Debug.Log("使用技能");
@@ -25,12 +24,7 @@ public class TankTemp : Character
             damage *= 2;
         }
         Get_target(true)[0].Defense(damage);
-        base.Skill(isCritic);
-        return 1;
-    }
-
-    protected override void Die()
-    {
+        return base.Skill(isCritic);
     }
 
     /*public override void Attack_cartoon()

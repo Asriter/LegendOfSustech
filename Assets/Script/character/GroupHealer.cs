@@ -27,7 +27,7 @@ public class GroupHealer : Character //群体治疗 TODO 大招有bug，猜测�
         {
             friend.Get_heal(Heal(Count_atk()));
         }
-        return 1;
+        return base.Skill(isCritic);
     }
 
     public override List<Character> Get_target(bool skill)
