@@ -60,7 +60,9 @@
   <ItemGroup>
      <Compile Include="Assets\Script\battle_field\BattleCreater.cs" />
      <Compile Include="Assets\Script\battle_field\GridUnit.cs" />
+     <Compile Include="Assets\Script\battle_field\HP_MP_Bar.cs" />
      <Compile Include="Assets\Script\battle_field\Main.cs" />
+     <Compile Include="Assets\Script\battle_field\SceneData.cs" />
      <Compile Include="Assets\Script\battle_field\battle_data.cs" />
      <Compile Include="Assets\Script\battle_field\controller.cs" />
      <Compile Include="Assets\Script\character\Buff.cs" />
