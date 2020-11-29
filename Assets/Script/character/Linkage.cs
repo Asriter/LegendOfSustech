@@ -2,7 +2,7 @@
 using UnityEngine;
 using Random = System.Random;
 
-public class Linkage : Character
+public class Linkage : Character //联动 TODO 有bug,引用错误
 {
     public Linkage() : base(4000, 500, 40, 5, 300, 1)
     {

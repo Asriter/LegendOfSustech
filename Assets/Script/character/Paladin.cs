@@ -1,6 +1,6 @@
 ﻿using Random = System.Random;
 
-public class Paladin : Character
+public class Paladin : Character //奶骑
 {
     public Paladin() : base(4500, 1200, 30, 5, 300, 1)
     {

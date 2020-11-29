@@ -16,12 +16,17 @@
           </e>
           <e p="character" t="Include">
             <e p="Buff.cs" t="Include" />
+            <e p="Buffer.cs" t="Include" />
+            <e p="Calmer.cs" t="Include" />
             <e p="Character.cs" t="Include" />
             <e p="CharacterFactory.cs" t="Include" />
             <e p="Explosive.cs" t="Include" />
+            <e p="GroupHealer.cs" t="Include" />
             <e p="Linkage.cs" t="Include" />
             <e p="MvpTemp.cs" t="Include" />
             <e p="Paladin.cs" t="Include" />
+            <e p="Silence.cs" t="Include" />
+            <e p="TaiChi.cs" t="Include" />
             <e p="TankTemp.cs" t="Include" />
             <e p="Taunter.cs" t="Include" />
             <e p="WarriorTemp.cs" t="Include" />

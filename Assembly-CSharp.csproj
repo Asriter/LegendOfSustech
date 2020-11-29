@@ -64,12 +64,17 @@
      <Compile Include="Assets\Script\battle_field\battle_data.cs" />
      <Compile Include="Assets\Script\battle_field\controller.cs" />
      <Compile Include="Assets\Script\character\Buff.cs" />
+     <Compile Include="Assets\Script\character\Buffer.cs" />
+     <Compile Include="Assets\Script\character\Calmer.cs" />
      <Compile Include="Assets\Script\character\Character.cs" />
      <Compile Include="Assets\Script\character\CharacterFactory.cs" />
      <Compile Include="Assets\Script\character\Explosive.cs" />
+     <Compile Include="Assets\Script\character\GroupHealer.cs" />
      <Compile Include="Assets\Script\character\Linkage.cs" />
      <Compile Include="Assets\Script\character\MvpTemp.cs" />
      <Compile Include="Assets\Script\character\Paladin.cs" />
+     <Compile Include="Assets\Script\character\Silence.cs" />
+     <Compile Include="Assets\Script\character\TaiChi.cs" />
      <Compile Include="Assets\Script\character\TankTemp.cs" />
      <Compile Include="Assets\Script\character\Taunter.cs" />
      <Compile Include="Assets\Script\character\WarriorTemp.cs" />

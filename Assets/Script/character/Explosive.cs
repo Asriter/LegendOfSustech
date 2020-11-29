@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-public class Explosive : Character
+public class Explosive : Character //自爆卡车
 {
     //被动：起始无怒气（避免炸的太快）
-    public Explosive() : base(3600, 750, 40, 0, 300, 1)
+    public Explosive() : base(3600, 750, 40, 0, 300, 2)
     {
         this.id = 7;
         Modify_mp(0);
