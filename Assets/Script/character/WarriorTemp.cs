@@ -24,12 +24,7 @@ public class WarriorTemp : Character
             damage *= 2;
         }
         Get_target(true)[0].Defense(damage);
-        base.Skill(isCritic);
-        return 1;
-    }
-
-    protected override void Die()
-    {
+        return base.Skill(isCritic);
     }
 
     /*public override void Attack_cartoon()

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-public class Explosive : Character
+public class Explosive : Character //自爆卡车
 {
     //被动：起始无怒气（避免炸的太快）
-    public Explosive() : base(3600, 750, 40, 0, 300, 1)
+    public Explosive() : base(3600, 750, 40, 0, 300, 2)
     {
         this.id = 7;
         Modify_mp(0);
@@ -22,8 +22,7 @@ public class Explosive : Character
     {
         _hp = 0;
         Die();
-        base.Skill(isCritic);
-        return 1;
+        return base.Skill(isCritic);
     }
 
     //死亡：炸全场1.5倍攻击力伤害，包括敌我（先计算敌方受伤）

@@ -3,8 +3,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using UnityEngine;
 using Random = System.Random;
 
@@ -14,11 +12,17 @@ public abstract class Character : MonoBehaviour
     public readonly double _maxHp; //最大生命值
     public double _hp; //当前生命
     public int _mp = 50; //蓝量，满蓝放技能
-    protected readonly double _atk; //攻击力
-    protected readonly double _def; //防御
-    protected readonly double _critic; //暴击率，5表示5%暴击率
-    public readonly double _speed;
+    public readonly double _atk; //攻击力
+    public readonly double _def; //防御
+    public readonly double _critic; //暴击率，5表示5%暴击率
     private List<Buff> _buffs; //rt
+
+    protected int _atkMp = 50; //普攻增加的怒气
+    protected int _skillMp = 100; //大招所需怒气
+
+    public readonly double _speed; //速度
+    public readonly int _cost; //费用
+
     private List<int> _msg; //报文
     private Vector3Int location; //在那个格子里
     protected int id; //用于实例化之后的单位，通过id获取对应对象
@@ -27,7 +31,7 @@ public abstract class Character : MonoBehaviour
     //TODO 可否调用动画，该选项存疑暂不使用
     //public bool isAnimation = false;
 
-    //TODO 在调用action的时候传入，可能加入set
+    //TODO在调用action的时候传入，可能加入set
     protected battle_data battleData;
 
     //待添加
@@ -60,21 +64,30 @@ public abstract class Character : MonoBehaviour
         _msg.Add(location.x);
         _msg.Add(location.y);
         _msg.Add(location.z);
-        if (_mp < 100) //怒气小于100普攻，否则skill
+
+        //检测沉默
+        bool silent = false;
+        foreach (Buff buff in _buffs)
+        {
+            if (buff._buffKind == BuffKind.Silence)
+            {
+                silent = true;
+                break;
+            }
+        }
+
+        if (_mp < _skillMp || silent) //怒气小于100或沉默状态下普攻，否则skill
         {
             _msg.Add(0);
             Attack(Count_critic());
-            //Modify_mp(50); //普攻怒气加50
         }
         else
         {
             _msg.Add(1);
             Skill(Count_critic());
-            //Modify_mp(0);
         }
 
-        //Check_buff_remain(); //skill后怒气归零
-        //Debug.Log("攻击对象" + _msg[0] + " " + _msg[1] + " " + _msg[2] + " " + "技能：" + _msg[3] + " 暴击：" + _msg[4]);
+        Check_buff_remain(); //减少buff持续时间1回合
         return _msg;
     }
 
@@ -82,9 +95,10 @@ public abstract class Character : MonoBehaviour
     //将返回状态值修改成返回伤害
     public virtual double Attack(bool isCritic)
     {
+        Modify_mp(_atkMp);
         double atk = Count_atk();
         double damage = Count_damage(atk);
-        //damage = this.Count_critic(damage);
+        
         //是否暴击
         if (isCritic)
         {
@@ -93,8 +107,6 @@ public abstract class Character : MonoBehaviour
         }
 
         Get_target(false)[0].Defense(damage);
-        Modify_mp(50); //普攻怒气加50
-        Check_buff_remain();
         return damage;
     }
 
@@ -108,24 +120,11 @@ public abstract class Character : MonoBehaviour
             Die();
         }
     }
-
-    //释放技能，该部分根据各个单位的子类具体实现
-    public virtual int Skill(bool isCritic)
-    {
-        Modify_mp(0); //普攻怒气加50
-        Check_buff_remain();
-        return 1;
-    }
-
-    //退场动画，效果等
-    protected virtual void Die()
-    {
-    }
-
+    
     //获取攻击目标
     //一般来说isskill没什么用，但如果技能和平A攻击范围不同时有用
     //面对范围攻击的情况，此处返回值修改为list
-    public virtual List<Character> Get_target(bool skill) //TODO
+    public virtual List<Character> Get_target(bool skill)
     {
         List<Character> list = new List<Character>();
 
@@ -198,8 +197,9 @@ public abstract class Character : MonoBehaviour
     }
 
     //治疗
-    public virtual void heal()
+    public virtual double Heal(double amount)
     {
+        return Buff_affect(amount, BuffKind.Heal);
     }
 
     /*
@@ -218,6 +218,7 @@ public abstract class Character : MonoBehaviour
         {
             _mp += amount;
             _mp = Math.Min(100, _mp); //怒气最高为100
+            _mp = Math.Max(0, _mp); //怒气最低为0
         }
         else
             _mp = 0;
@@ -235,6 +236,34 @@ public abstract class Character : MonoBehaviour
                 _buffs.Remove(buff);
             }
         }
+    }
+
+    //计算实际攻击力
+    protected double Count_atk()
+    {
+        double atk = _atk;
+        atk = Buff_affect(atk, BuffKind.Atk); //根据buff增减攻击力
+        return atk;
+    }
+
+    //计算理论伤害值
+    protected double Count_damage(double damage)
+    {
+        damage = Buff_affect(damage, BuffKind.Damage); //根据buff增减伤害
+        return damage;
+    }
+    
+    //计算暴击
+    public bool Count_critic()
+    {
+        if (new Random().NextDouble() <= _critic / 100)
+        {
+            _msg.Add(1);
+            return true;
+        }
+
+        _msg.Add(0);
+        return false;
     }
 
     //计算实际攻击力
@@ -312,6 +341,13 @@ public abstract class Character : MonoBehaviour
         return num;
     }
 
+    //释放技能，该部分根据各个单位的子类具体实现
+    public virtual int Skill(bool isCritic)
+    {
+        Modify_mp(0); //skill后怒气归零
+        return 1;
+    }
+
     public int GetId()
     {
         return id;
@@ -325,6 +361,11 @@ public abstract class Character : MonoBehaviour
     public void SetLocation(Vector3Int location)
     {
         this.location = location;
+    }
+
+    //退场动画，效果等
+    protected virtual void Die()
+    {
     }
 
     //暂时用于演示demo，后续加细节

@@ -36,6 +36,7 @@ public enum BuffKind
     GainDamage,
     Heal,
     GainHeal,
-    Taunt
+    Taunt,
+    Silence
 }
 //TODO： 更多的buff……
