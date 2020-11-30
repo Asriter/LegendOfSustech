@@ -1,20 +1,39 @@
 ﻿using System.Collections.Generic;
 
-public class Taunter : Character //嘲讽盾
+public class DoubleAgent : Character
 {
-    //被动：加10%防御
-    public Taunter() : base(4500, 800, 50, 5, 300, 1)
+    public DoubleAgent() : base(2600, 2000, 15, 10, 300, 1)
     {
-        this.id = 4;
-        Get_buff(new Buff(BuffKind.Def, 10, true, 999));
+        id = 20;
     }
 
-    //大招：对全体敌人造成0.2倍攻击力伤害，并获得嘲讽一回合
+    //被动：普攻后给予自己20%攻击力加成2回合，若攻击目标存活，它也获得同样的buff
+    public override double Attack(bool isCritic)
+    {
+        Modify_mp(_atkMp);
+        double atk = Count_atk();
+        double damage = Count_damage(atk);
+        
+        if (isCritic)
+        {
+            damage *= 2;
+        }
+
+        Character target = Get_target(false)[0];
+        target.Defense(damage);
+        Get_buff(new Buff(BuffKind.Atk, 20, true, 2));
+        if(target._hp > 0)
+            target.Get_buff(new Buff(BuffKind.Atk, 20, true, 2));
+        return damage;
+    }
+
+    //大招：对敌方全体造成0.7倍攻击力伤害
     public override int Skill(bool isCritic)
     {
         double atk = Count_atk();
-        double damage = Count_damage(0.2 * atk);
-        if(isCritic){
+        double damage = Count_damage(0.7 * atk);
+        if (isCritic)
+        {
             damage *= 2;
         }
 
@@ -23,18 +42,15 @@ public class Taunter : Character //嘲讽盾
         {
             target.Defense(damage);
         }
-        
-        Get_buff(new Buff(BuffKind.Taunt, 0, false, 1));
 
         return base.Skill(isCritic);
     }
 
     public override List<Character> Get_target(bool skill)
     {
-        //不是技能就正常get target
         if (!skill)
             return base.Get_target(skill);
-        //是技能就攻击所有敌方活着的单位
+        //大招攻击所有敌方活着的单位
         List<Character> list = new List<Character>();
         if (battleData == null)
             battleData = controller.Instance.battleData;
@@ -54,6 +70,7 @@ public class Taunter : Character //嘲讽盾
                 }
             }
         }
+
         return list;
     }
 }

@@ -12,12 +12,10 @@ public class MvpTemp : Character
     public MvpTemp() : base(2600, 3000, 15, 5, 300, 1)
     {
         this.id = 1;
-        
     }
 
     public override int Skill(bool isCritic)
     {
-        Modify_mp(0);
         double atk = Count_atk();
         double damage = Count_damage(2 * atk);
         //Debug.Log("使用技能");

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-public class GroupHealer : Character //群体治疗 TODO 大招有bug，猜测是因为大招的目标只有友方没有敌方，缺少治疗动画
+public class GroupHealer : Character //群体治疗 bug 大招会报红，猜测是因为大招的目标只有友方没有敌方，缺少治疗动画
 {
     public GroupHealer() : base(2500, 1500, 20, 5, 300, 1)
     {

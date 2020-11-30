@@ -16,7 +16,7 @@ public abstract class Character : MonoBehaviour
     public readonly double _atk; //攻击力
     public readonly double _def; //防御
     public readonly double _critic; //暴击率，5表示5%暴击率
-    private List<Buff> _buffs; //rt
+    public List<Buff> _buffs; //rt
 
     protected int _atkMp = 50; //普攻增加的怒气
     protected int _skillMp = 100; //大招所需怒气
@@ -216,7 +216,7 @@ public abstract class Character : MonoBehaviour
         if (amount != 0)
         {
             _mp += amount;
-            _mp = Math.Min(100, _mp); //怒气最高为100
+            _mp = Math.Min(_skillMp, _mp); //怒气最高为角色大招所需mp
             _mp = Math.Max(0, _mp); //怒气最低为0
         }
         else
@@ -275,7 +275,7 @@ public abstract class Character : MonoBehaviour
     }
 
     //计算实际防御值
-    protected double Count_def()
+    public double Count_def()
     {
         double def = _def;
         def = Buff_affect(def, BuffKind.Def); //根据buff增减实际防御
@@ -303,9 +303,9 @@ public abstract class Character : MonoBehaviour
     {
         for (int i = 0, len = _buffs.Count; i < len; i++)
         {
-            if (_buffs[i]._buffKind == buffKind) //判断是否为增加获得治疗量的buff
+            if (_buffs[i]._buffKind == buffKind) //判断是否为对应buff
             {
-                num = _buffs[i].Count(num); //若是，则根据buff增减治疗量
+                num = _buffs[i].Count(num); //若是，则根据buff增减数值
             }
         } //由于排序时百分比buff在后面，数值buff在前面，所以遍历时会先加数值再乘百分比
 

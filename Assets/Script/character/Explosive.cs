@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-public class Explosive : Character //自爆卡车
+public class Explosive : Character //自爆卡车 TODO 炸的伤害过高，有点影响游戏体验
 {
     //被动：起始无怒气（避免炸的太快）
     public Explosive() : base(3600, 750, 40, 0, 300, 2)
@@ -13,7 +13,7 @@ public class Explosive : Character //自爆卡车
     public override void Defense(double damage)
     {
         base.Defense(damage);
-        Get_buff(new Buff(BuffKind.Def, 5, false, 999));
+        Get_buff(new Buff(BuffKind.Def, -5, false, 999));
         Get_buff(new Buff(BuffKind.Atk, 250, false, 999));
     }
 
@@ -25,7 +25,7 @@ public class Explosive : Character //自爆卡车
         return base.Skill(isCritic);
     }
 
-    //死亡：炸全场1.5倍攻击力伤害，包括敌我（先计算敌方受伤）
+    //死亡：炸全场1倍攻击力伤害，包括敌我（先计算敌方受伤）
     protected override void Die()
     {
         //检测所有活着的单位
@@ -57,7 +57,7 @@ public class Explosive : Character //自爆卡车
         }
 
         double atk = Count_atk();
-        double damage = Count_damage(1.5 * atk);
+        double damage = Count_damage(atk);
         if (Count_critic())
         {
             damage *= 2;
