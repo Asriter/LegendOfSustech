@@ -1,6 +1,6 @@
 ﻿using System;
 
-public class Calmer : Character //频繁减怒
+public class Calmer : Character //频繁减怒 bug 怒气显示bug
 {
     //被动：开大需要怒气为50（开局就能开大）
     public Calmer() : base(3000, 2000, 25, 10, 300, 1)

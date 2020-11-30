@@ -2,10 +2,10 @@
 
 public class TaiChi : Character //打太极
 {
-    private bool _taiChi = false;
+    private bool _taiChi = false; //表示是否在太极状态
 
     //被动: 普攻获得怒气为100
-    public TaiChi() : base(4000, 1200, 40, 10, 250, 1)
+    public TaiChi() : base(4000, 1200, 40, 10, 200, 1)
     {
         this.id = 9;
         _atkMp = 100;

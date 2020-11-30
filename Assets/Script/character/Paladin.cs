@@ -1,6 +1,6 @@
 ﻿using Random = System.Random;
 
-public class Paladin : Character //奶骑
+public class Paladin : Character //奶骑 bug 血条显示错误，回血后不会立刻调整血条，只有受攻击后才会调整血条
 {
     public Paladin() : base(4500, 1200, 30, 5, 300, 1)
     {

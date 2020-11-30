@@ -193,7 +193,8 @@ public class controller : MonoBehaviour
                         //该位置的单位不为空
                         if (battleData.hasCharacterInGrid(i, x, y))
                         {
-                            if(characterList[i, x, y].GetHp() <= 0 && characterList[i, x, y].gameObject.transform.parent.gameObject.activeSelf)
+                            if(characterList[i, x, y].GetHp() <= 0 && 
+                               characterList[i, x, y].gameObject.transform.parent.gameObject.activeSelf)
                             {
                                 //Debug.Log(characterList[i, x, y].gameObject.activeSelf);
                                 characterList[i, x, y].Start_Die_cartoon();
