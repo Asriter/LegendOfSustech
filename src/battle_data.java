@@ -238,6 +238,7 @@ public class battle_data
 
     public ArrayList<ArrayList<Integer>> GetBattleData()
     {
+        if (this.battleData.isEmpty()) return null;
         return this.battleData;
     }
 

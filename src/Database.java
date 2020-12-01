@@ -11,6 +11,8 @@ public class Database {
     private String pwd = "Xia12345";
     private String port = "3306";
 
+    public int uid;
+    public int op_uid;
 
     private boolean getConnection() {
         try {
@@ -30,6 +32,36 @@ public class Database {
             System.exit(1);
         }
         return false;
+    }
+
+
+    public boolean userLogin(String account, String password, String MAC){
+        String sql = "select * from user_data where phone = ? and MAC_address = ? and password = ?";
+        if (account.contains("@")){
+            sql = "select * from user_data where email = ? and MAC_address = ? and password = ?";
+        }
+        getConnection();
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, account);
+            preparedStatement.setString(2, MAC);
+            preparedStatement.setString(3,password);
+            resultSet = preparedStatement.executeQuery();
+            ;
+            if (resultSet.next()){
+                this.uid = resultSet.getInt("uid");
+                return true;
+            } else {
+                System.out.println("Wrong account or password");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return true;
     }
 
 

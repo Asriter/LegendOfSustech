@@ -3,12 +3,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class ServerThread extends Thread {
 
     public Socket socket;
     public InputStream ins;
     public OutputStream ous;
+    public Database db = new Database();
+    public battle_data battle;
+    public boolean safe = false;
 
     public ServerThread(Socket socket) {
         this.socket = socket;
@@ -19,76 +24,96 @@ public class ServerThread extends Thread {
             // 获取输入输出流
             ins = socket.getInputStream();
             ous = socket.getOutputStream();
-            // 发送消息给客户端
-            String msg = "welcome to the server !";
-            sendMsg(ous, msg);
             // 发送要求登录信息给客户端
-            String userinfo = "please input your name:";
-            while (true){
-                String str = readMsg(ins);
-                System.out.println(str);
+//            sendMsg(ous,"hi");
+            String str = readMsg(ins);
+            System.out.println(str);
+            String[] array = str.split(",");
+            if (!db.userLogin(array[0], array[1], array[2])) {
+                str = "wrong account";
+                sendMsg(ous, str);
+                throw new Exception("wrong login");
             }
-//            sendMsg(ous, userinfo);
-//            // 获取客户端输入的用户名
-//            String userName = readMsg(ins);
-//            System.out.println(userName);
-//            // 发送要求密码信息给客户端
-//            String pwd = "please input your password:";
-//            sendMsg(ous,  pwd);
-//            // 获取客户端输入的密码
-//            String pass = readMsg(ins);
-//            // 登录验证
-//            boolean falg = loginCheck(userName, pass);
-//            // 校验不通过时，循环校验
-//            while (!falg) {
-//                msg="no";
-//                sendMsg(ous, msg);
-//                msg = "Fail to connect server......";
-//                sendMsg(ous, msg);
-//                msg = "please check your name and password and login again.....";
-//                sendMsg(ous, msg);
-//                msg = "please input your name:";
-//                sendMsg(ous, msg);
-//                // 获取客户端输入的用户名
-//                userName = readMsg(ins);
-//                // 发送要求密码信息给客户端
-//                msg = "please input your password:";
-//                sendMsg(ous, msg);
-//                // 获取客户端输入的密码
-//                pass = readMsg(ins);
-//                falg = loginCheck(userName, pass);
-//            }
-//
-//            //发送登录成功的结果给客户端
-//            msg="ok";
-//            sendMsg(ous, msg);
-//            // 校验成功后：开始聊天
-//            msg = "successful connected..... you can chat with your friends now ......";
-//            sendMsg(ous, msg);
-//            // 聊天处理逻辑
-//            //读取客户端发来的消息
-//            msg=readMsg(ins);
-//            System.out.println("客户端已经接到消息："+msg);
-//            //输入bye结束聊天
-//            while(!"bye".equals(msg)){
-//                //给容器中的每个对象转发消息
-//                for (int i = 0; i <Myserver.list.size(); i++) {
-//                    ServerThread st =Myserver.list.get(i);
-//                    //不该自己转发消息
-//                    if(st!=this){
-//                        System.out.println("转发消息......");
-//                        sendMsg(st.ous, userName+"  is say:"+msg);
-//                        System.out.println("转发消息成功......");
-//                    }
-//                }
-//                //等待读取下一次的消息
-//                msg=readMsg(ins);
-//            }
+            str = readMsg(ins);
+            db.op_uid = Integer.parseInt(str);
+            str = readMsg(ins);
+            if (Myserver.matchList.containsKey(db.uid)) {
+                if (Myserver.matchList.get(db.uid) == db.op_uid) {
+                    array = str.split(",");
+                    ArrayList<int[]> myCharacterList = new ArrayList<>();
+                    for (int i = 0; i < array.length / 7; i++) {
+                        int[] tmp = new int[7];
+                        for (int j = 0; j < 7; j++) {
+                            tmp[j] = Integer.parseInt(array[i * 7 + j]);
+                        }
+                        myCharacterList.add(tmp);
+                    }
+                    Myserver.playerCharacterList.put(db.uid, myCharacterList);
+                    battle = new battle_data(myCharacterList, Myserver.playerCharacterList.get(db.op_uid));
+                    System.out.println(battle);
+                    safe = true;
+                    ArrayList<ArrayList<Integer>> battleData = battle.GetBattleData();
+                    StringBuilder send = new StringBuilder();
+                    for (ArrayList<Integer> battleDatum : battleData) {
+                        for (Integer integer : battleDatum) {
+                            send.append(integer).append(",");
+                        }
+                    }
+                    while (true){
+                        int n = 0;
+                        for (int i = 0; i < Myserver.list.size(); i++) {
+//                            System.out.println(!Myserver.list.get(i).safe);
+                            if (Myserver.list.get(i).db.op_uid == db.uid && Myserver.list.get(i).safe) {
+                                n = 1;
+                                break;
+                            }
+                        }
+                        if (n==1) break;
+                    }
+                    sendMsg(ous, send.toString());
+                    System.out.println(db.uid + " battle end");
+                    throw new Exception("end");
+                }
+            }
+            Myserver.matchList.put(db.op_uid, db.uid);
+            array = str.split(",");
+            ArrayList<int[]> myCharacterList = new ArrayList<>();
+            for (int i = 0; i < array.length / 7; i++) {
+                int[] tmp = new int[7];
+                for (int j = 0; j < 7; j++) {
+                    tmp[j] = Integer.parseInt(array[i * 7 + j]);
+                }
+                myCharacterList.add(tmp);
+            }
+            Myserver.playerCharacterList.put(db.uid, myCharacterList);
+            while (true) {
+                for (int i = 0; i < Myserver.list.size(); i++) {
+                    System.out.print("");
+//                    System.out.println(Myserver.list.get(i).safe);
+                    if (!Myserver.list.get(i).safe) continue;
+                    if (Myserver.list.get(i).db.op_uid == db.uid && Myserver.list.get(i).battle.GetBattleData() != null) {
+                        battle = new battle_data(myCharacterList, Myserver.playerCharacterList.get(db.op_uid));
+                        System.out.println(battle);
+                        ArrayList<ArrayList<Integer>> battleData = battle.GetBattleData();
+                        StringBuilder send = new StringBuilder();
+                        for (ArrayList<Integer> battleDatum : battleData) {
+                            for (Integer integer : battleDatum) {
+                                send.append(integer).append(",");
+                            }
+                        }
+                        safe = true;
+                        sendMsg(ous, send.toString());
+                        System.out.println(db.uid + " battle end");
+                        throw new Exception("end");
+                    }
+                }
+            }
 
         } catch (Exception e) {
-            System.out.println("客户端不正常关闭......");
-//			e.printStackTrace();
+            System.out.println(db.uid + " Client close\n" + e);
+			e.printStackTrace();
         }
+
         //有异常后统一将流关闭
         try {
             ins.close();
@@ -104,12 +129,8 @@ public class ServerThread extends Thread {
 
     // 校验客户端输入的账号和密码的函数,由于没有数据库，暂时写死了
     public boolean loginCheck(String name, String pwd) {
-        if (name.equals("zhou") && pwd.equals("zhou") || name.equals("user") && pwd.equals("pwd")
-                || name.equals("huaxinjiaoyu") && pwd.equals("huaxinjiaoyu")) {
-
-            return true;
-        }
-        return false;
+        return name.equals("zhou") && pwd.equals("zhou") || name.equals("user") && pwd.equals("pwd")
+                || name.equals("huaxinjiaoyu") && pwd.equals("huaxinjiaoyu");
     }
 
     // 发送消息的函数
@@ -123,22 +144,31 @@ public class ServerThread extends Thread {
 
     }
 
+    //还没有改好，勿用
+    public void sendList(OutputStream os, int[] list) throws IOException {
+        // 向客户端输出信息
+
+        os.write(13);
+        os.write(10);
+        os.flush();
+
+    }
+
     // 读取客户端输入数据的函数
     public String readMsg(InputStream ins) throws Exception {
         // 读取客户端的信息
         int value = ins.read();
         // 读取整行 读取到回车（13）换行（10）时停止读
-        String str = "";
+        StringBuilder str = new StringBuilder();
         while (value != 10) {
             // 点击关闭客户端时会返回-1值
             if (value == -1) {
                 throw new Exception();
             }
-            str = str + ((char) value);
+            str.append((char) value);
             value = ins.read();
         }
-        str = str.trim();
-        return str;
+        return str.toString().trim();
     }
 
 }
