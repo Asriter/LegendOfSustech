@@ -61,6 +61,16 @@ public class battle_data
 
         //测试用
         //this.battleData = GenerateBattleData();
+        //把角色信息加载到每个角色里面
+        for(int i = 0; i < characterList.length; i++)
+        {
+        	for(int j = 0; j < characterList[i].length; j++) {
+        		for(int k = 0; k < characterList[i][j].length; k++) {
+        			if(hasCharacterInGrid(i,j,k))
+        				characterList[i][j][k].setEnemies(characterList);
+        		}
+        	}
+        }
         this.battleData = battleData;
     }
 
@@ -107,6 +117,18 @@ public class battle_data
         
         //测试用
         //this.battleData = GenerateBattleData();
+
+         //把角色信息加载到每个角色里面
+        for(int i = 0; i < characterList.length; i++)
+        {
+        	for(int j = 0; j < characterList[i].length; j++) {
+        		for(int k = 0; k < characterList[i][j].length; k++) {
+        			if(hasCharacterInGrid(i,j,k))
+        				characterList[i][j][k].setEnemies(characterList);
+        		}
+        	}
+        }
+
         this.battleData = GenerateBattleData(myList, opList);
     }
 
