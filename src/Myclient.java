@@ -83,20 +83,20 @@ public class Myclient {
 //            if (result.equals("ok")) {
 ////				System.out.println("登陆成功");
 //                // 发送消息线程
-//                new Thread() {
-//                    public void run() {
-//                        try {
-//                            while (true) {
-//                                // 从控制台扫描一行数据
-//                                String message = scanner.nextLine();
-//                                sendMsg(ous, message + "\r\n");
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                    };
-//                }.start();
+                new Thread() {
+                    public void run() {
+                        try {
+                            while (true) {
+                                // 从控制台扫描一行数据
+                                String message = scanner.nextLine();
+                                sendMsg(ous, message + "\r\n");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    };
+                }.start();
 //
 //                //读取消息线程
 //                new Thread() {

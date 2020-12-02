@@ -8,6 +8,7 @@ public class Myserver {
     public static ArrayList<ServerThread>list =new ArrayList<>();
     public static Map<Integer, ArrayList<int[]>>playerCharacterList = new HashMap<>();
     public static Map<Integer, Integer> matchList = new HashMap<>();
+    public static Map<String, int[]> roomList = new HashMap<>();
     public void initServer() {
 
         try {
