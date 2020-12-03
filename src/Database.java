@@ -37,7 +37,7 @@ public class Database {
     public String getUserName(int id) {
         getConnection();
         StringBuilder sb = new StringBuilder();
-        String sql = "select nick_name from user_data where user_id = " + id + ";";
+        String sql = "select nick_name from user_data where uid = " + id + ";";
         try {
             Statement statement = con.createStatement();
             resultSet = statement.executeQuery(sql);
@@ -55,7 +55,7 @@ public class Database {
     public String getAllChess() {
         getConnection();
         StringBuilder sb = new StringBuilder();
-        String sql = "select chess_type,level from chess_data where user_id = " + uid + ";";
+        String sql = "select chess_type,level from chess_data where uid = " + uid + ";";
         try {
             Statement statement = con.createStatement();
             resultSet = statement.executeQuery(sql);
