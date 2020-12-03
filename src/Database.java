@@ -55,7 +55,7 @@ public class Database {
     public String getAllChess() {
         getConnection();
         StringBuilder sb = new StringBuilder();
-        String sql = "select chess_type,level from chess_data where uid = " + uid + ";";
+        String sql = "select chess_type,level from chess_data where user_uid = " + uid + ";";
         try {
             Statement statement = con.createStatement();
             resultSet = statement.executeQuery(sql);
