@@ -1,3 +1,5 @@
+import com.mysql.cj.AppendingBatchVisitor;
+
 import java.util.Random;
 import java.io.IOException;
 import java.io.InputStream;
@@ -94,7 +96,15 @@ public class ServerThread extends Thread {
                                 }
                                 if (n==1) break;
                             }
+                            StringBuilder myChess = new StringBuilder();
+                            ArrayList<int[]> list = Myserver.playerCharacterList.get(db.op_uid);
+                            for (int[] ints : list) {
+                                for (int j = 0; j < ints.length; j++) {
+                                    myChess.append(ints[j]).append(",");
+                                }
+                            }
                             sendMsg(ous, send.toString());
+                            sendMsg(ous,myChess.toString());
                             System.out.println(db.uid + " battle end");
                             break;
                         }
@@ -124,7 +134,15 @@ public class ServerThread extends Thread {
                                         }
                                     }
                                     safe = true;
+                                    StringBuilder myChess = new StringBuilder();
+                                    ArrayList<int[]> list = Myserver.playerCharacterList.get(db.op_uid);
+                                    for (int[] ints : list) {
+                                        for (int j = 0; j < ints.length; j++) {
+                                            myChess.append(ints[j]).append(",");
+                                        }
+                                    }
                                     sendMsg(ous, send.toString());
+                                    sendMsg(ous,myChess.toString());
                                     System.out.println(db.uid + " battle end");
                                     loop = false;
                                     break;

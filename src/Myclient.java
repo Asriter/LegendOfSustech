@@ -21,21 +21,21 @@ public class Myclient {
             final Scanner scanner = new Scanner(System.in);
 //            System.out.println(readMsg(ins));
 
-            String str = scanner.nextLine().trim() + "\r\n";
-            sendMsg(ous, str);
-            str = scanner.nextLine().trim() + "\r\n";
-            sendMsg(ous, str);
-            str = scanner.nextLine().trim() + "\r\n";
-            sendMsg(ous, str);
-            String s = readMsg(ins);
-            String[] array = s.split(",");
-            for (int i = 0; i < array.length / 5; i++) {
-                int[] tmp = new int[5];
-                for (int j = 0; j < 5; j++) {
-                    tmp[j] = Integer.parseInt(array[i * 7 + j]);
-                }
-                System.out.println(Arrays.toString(tmp));
-            }
+//            String str = scanner.nextLine().trim() + "\r\n";
+//            sendMsg(ous, str);
+//            str = scanner.nextLine().trim() + "\r\n";
+//            sendMsg(ous, str);
+//            str = scanner.nextLine().trim() + "\r\n";
+//            sendMsg(ous, str);
+//            String s = readMsg(ins);
+//            String[] array = s.split(",");
+//            for (int i = 0; i < array.length / 5; i++) {
+//                int[] tmp = new int[5];
+//                for (int j = 0; j < 5; j++) {
+//                    tmp[j] = Integer.parseInt(array[i * 7 + j]);
+//                }
+//                System.out.println(Arrays.toString(tmp));
+//            }
 
 //            // 接收服务端发送过来输入用户名的请求
 //            String requestName = readMsg(ins);
@@ -83,34 +83,30 @@ public class Myclient {
 //            if (result.equals("ok")) {
 ////				System.out.println("登陆成功");
 //                // 发送消息线程
-                new Thread() {
-                    public void run() {
-                        try {
-                            while (true) {
-                                // 从控制台扫描一行数据
-                                String message = scanner.nextLine();
-                                sendMsg(ous, message + "\r\n");
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                new Thread(() -> {
+                    try {
+                        while (true) {
+                            // 从控制台扫描一行数据
+                            String message = scanner.nextLine();
+                            sendMsg(ous, message + "\r\n");
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                    };
-                }.start();
+                }).start();
 //
-//                //读取消息线程
-//                new Thread() {
-//                    public void run() {
-//                        try {
-//                            while (true) {
-//                                String message = readMsg(ins);
-//                                System.out.println(message);
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    };
-//                }.start();
+                //读取消息线程
+                new Thread(() -> {
+                    try {
+                        while (true) {
+                            String message = readMsg(ins);
+                            System.out.println(message);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
 //            } else {
 //                System.out.println("登陆失败");
 //            }
