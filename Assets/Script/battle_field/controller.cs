@@ -32,6 +32,8 @@ public class controller : MonoBehaviour
     //GridUnit[,,] gridUnits = new GridUnit[2,3,3];
     [SerializeField] Transform CharacterTransform;
 
+    [SerializeField] UI_BattleResult battleResult;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -133,7 +135,8 @@ public class controller : MonoBehaviour
     {
         Character[,,] characterList = battleData.GetCharacterList();
         yield return new WaitForSeconds(0.5f);
-        Debug.Log(battleData.GetBattleData().Count);
+        //Debug.Log(battleData.GetBattleData().Count);
+
         foreach (List<int> list in battleData.GetBattleData())
         {
             //Debug.Log("该条战斗信息:" + list[0] + " " + list[1] + " " + list[2] + " " + list[3] + " " + list[4]);
@@ -212,6 +215,8 @@ public class controller : MonoBehaviour
                 yield return new WaitForSeconds(0.1f);
         }
         yield return new WaitForSeconds(0f);
+        //结算界面
+        battleResult.OnShow();
     }
 
     //通过坐标获取对应grid

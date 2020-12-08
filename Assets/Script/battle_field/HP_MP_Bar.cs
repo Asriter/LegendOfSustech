@@ -18,7 +18,7 @@ public class HP_MP_Bar : MonoBehaviour
     void Update()
     {
         double dhp = character._hp / character._maxHp;
-        double dmp = character._mp / max_mp;
+        double dmp = (double)character._mp / character.getMaxMp();
         //Debug.Log(character._mp);
 
         if(isChangeHp)

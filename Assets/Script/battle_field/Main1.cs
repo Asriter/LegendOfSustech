@@ -12,6 +12,8 @@ public class Main1 : MonoBehaviour
 
     [SerializeField] public controller c;
 
+    [SerializeField] UI_BattleResult battleResult;
+
     public battle_data battleData;
     // Start is called before the first frame update
 
@@ -24,13 +26,18 @@ public class Main1 : MonoBehaviour
         List<int[]> myList = new List<int[]>();
         List<int[]> opList = new List<int[]>();
 
-        myList.Add(new int[7]{2,0,0,0,0,0,0});
+        battleResult.OnHide();
+
+        /*myList.Add(new int[7]{2,0,0,0,0,0,0});
         myList.Add(new int[7]{2,1,0,0,0,0,0});
         myList.Add(new int[7]{2,2,0,0,0,0,0});
         myList.Add(new int[7]{1,0,1,0,0,0,0});
         myList.Add(new int[7]{3,2,1,0,0,0,0});
         myList.Add(new int[7]{3,0,2,0,0,0,0});
-        myList.Add(new int[7]{3,1,2,0,0,0,0});
+        myList.Add(new int[7]{3,1,2,0,0,0,0});*/
+
+        SceneData sc = GameObject.Find("SceneData").GetComponent<SceneData>();
+        myList = sc.MyList;
         
         opList.Add(new int[7]{2,0,0,0,0,0,0});
         opList.Add(new int[7]{2,1,0,0,0,0,0});
