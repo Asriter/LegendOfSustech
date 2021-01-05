@@ -1342,6 +1342,7 @@ GameObject:
   m_Component:
   - component: {fileID: 197721749}
   - component: {fileID: 197721748}
+  - component: {fileID: 197721750}
   m_Layer: 0
   m_Name: SceneData
   m_TagString: Untagged
@@ -1376,6 +1377,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &197721750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197721747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47dd020cbafbaec4ba0264a81d54fb55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  s: {fileID: 0}
+  ID: 0
+  Room: -1
+  Quit: 0
+  op_id: -1
+  isMy: 0
+  opOffline: 0
+  opName: 
 --- !u!1 &238221521
 GameObject:
   m_ObjectHideFlags: 0
@@ -2682,7 +2703,7 @@ MonoBehaviour:
   Password: {fileID: 871179822}
   btnLogin: {fileID: 1509588473}
   controller: {fileID: 881805513}
-  socketConnector: {fileID: 0}
+  socketConnector: {fileID: 197721750}
 --- !u!1 &522527433
 GameObject:
   m_ObjectHideFlags: 0
@@ -4609,7 +4630,7 @@ MonoBehaviour:
   password: {fileID: 700771603}
   rePassword: {fileID: 922726354}
   btnRegister: {fileID: 286589210}
-  socketConnector: {fileID: 0}
+  socketConnector: {fileID: 197721750}
 --- !u!1 &847296025
 GameObject:
   m_ObjectHideFlags: 0
@@ -11496,7 +11517,6 @@ MonoBehaviour:
   - {fileID: 1588046189}
   - {fileID: 1453149502}
   - {fileID: 1777604146}
-  sceneData: {fileID: 197721748}
   characterButtomModel: {fileID: 5261100301852819207, guid: ad79744f2aaf51944ae2d0e5eaf62c40,
     type: 3}
   buttonRoot: {fileID: 699614040}
