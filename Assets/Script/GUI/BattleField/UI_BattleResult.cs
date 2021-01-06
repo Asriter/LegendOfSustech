@@ -33,7 +33,7 @@ public class UI_BattleResult : UIViewTemplate
 
     private void setBtnReturn()
     {
-        GameObject.Find("SceneData").GetComponent<SceneData>().isReEmbattle = true;
+        //GameObject.Find("SceneData").GetComponent<SceneData>().isReEmbattle = true;
         this.OnHide();
         SceneManager.LoadScene("Menu");
     }

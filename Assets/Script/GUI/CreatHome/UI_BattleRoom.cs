@@ -112,6 +112,7 @@ public class UI_BattleRoom : UIViewTemplate
 
             //生成地方阵容数据
             List<int[]> OpList = socketConnector.opList;
+            sceneData.OpList = OpList;
             //TODO根据生成的BattleDATA调用Scene
             SceneManager.LoadScene("BattleField");
         }
@@ -138,7 +139,7 @@ public class UI_BattleRoom : UIViewTemplate
     {
         DateTime newTime = DateTime.Now;
         TimeSpan timeSpan = newTime - nowTime;
-        if (timeSpan.Milliseconds < 1000)
+        if (timeSpan.TotalMilliseconds < 1000)
         {
             return;
         }
@@ -149,8 +150,9 @@ public class UI_BattleRoom : UIViewTemplate
 
         if (isStart && !isOppAddRoom)
         {
-            Thread t = new Thread(new ThreadStart(socketConnector.hasOpp));
-            t.Start();
+            //Thread t = new Thread(new ThreadStart(socketConnector.hasOpp));
+            //t.Start();
+            socketConnector.hasOpp();
             if (socketConnector.isOpEnter)
             {
                 isOppAddRoom = true;

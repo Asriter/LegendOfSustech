@@ -82,23 +82,24 @@ public class UI_ChooseModel : UIViewTemplate
 
     private void setBtnCurrentAddRoom()
     {
-        if (_roomNumber.Equals("-1"))
+        if (string.Compare(_roomNumber, "-1") == 0)
         {
             UnityEditor.EditorUtility.DisplayDialog("连接错误", "请输入房间号", "确认");
             return;
         }
 
         string name = socketConnector.AttendRoom(_roomNumber);
+        Debug.Log(name);
         //连接失败
-        if (name.Equals("fail"))
+        if (string.Compare(name, "fail") == 0)
         {
             UnityEditor.EditorUtility.DisplayDialog("连接错误", "无法加入房间", "确认");
             return;
         }
-
         //标记房间号
-        createRoom._roomName = int.Parse(name);
-        this._roomNumber = name;
+        createRoom._roomName = int.Parse(this._roomNumber);
+        socketConnector.Room = int.Parse(this._roomNumber);
+        //this._roomNumber = name;
 
         //打开房间窗口
         battleRoom.OnShow();
