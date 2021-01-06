@@ -17,6 +17,9 @@ public class UI_BattleRoom : UIViewTemplate
     [SerializeField] SocketConnector socketConnector;
     [SerializeField] UI_CreateRoom createRoom;
 
+    //房间号
+    [SerializeField] Text _roomNumber;
+
     //双方角色信息
     [SerializeField] Image myHeadPortrait;
     [SerializeField] Text myUserName;
@@ -54,8 +57,9 @@ public class UI_BattleRoom : UIViewTemplate
         isReady = false;
 
         maskPanel.SetActive(true);
+        _roomNumber.text = socketConnector.Room + "";
 
-        Debug.Log("开始加载界面");
+        //Debug.Log("开始加载界面");
 
         //判断我方用不用等人
         if (!socketConnector.isThis)
