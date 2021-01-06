@@ -11,11 +11,16 @@ public class SocketConnector : MonoBehaviour
     public int Room = -1;
     public bool Quit = false;
     public int op_id = -1; //对手id
-    public bool isMy; //true表示己方是mycharacterlist（其实是房主就是my）
+    //public bool isMy; //true表示己方是mycharacterlist（其实是房主就是my）
+    //public bool isMyStart;
+
+    public bool isThis = true;
     public bool opOffline = false;
     public List<int[]> opList = new List<int[]>();
 
-    public string opName;
+    public string opName = "";
+
+    public bool isOpEnter = false;
     public void Start()
     {
         //创建socket连接
@@ -82,13 +87,24 @@ public class SocketConnector : MonoBehaviour
 
     public bool BuildRoom() //返回4位数字,然后调用WatchRoom
     {
+        isOpEnter = false;
         Quit = false;
-        isMy = true;
         Send("buildRoom");
         string back = GetData();
         Room = int.Parse(back);
+        //isMyStart = true;
+        isThis = true;
+        //isOver = true;
         return true;
     }
+
+    /*public bool BuildRoomThread()
+    {
+        //bool isOver = false;
+        Thread t = new Thread(new ThreadStart(BuildRoom));
+        t.Start();
+        return true;
+    }*/
 
     public void WatchRoom()
     {
@@ -102,15 +118,21 @@ public class SocketConnector : MonoBehaviour
     {
         Send("quitRoom");
         Quit = true;
+
+        //把所有参数初始化
+        op_id = -1;
+        opList = new List<int[]>();
+        opName = "";
+        isOpEnter = false;
     }
 
     public string AttendRoom(string code) //返回对手用户昵称
     {
-        isMy = false;
+        isThis = false;
         Send("attendRoom");
         Send(code);
         string back = GetData();
-        if (back.Equals("fail"))
+        if (String.Compare(back, "fail") == 0)
         {
             return back;
         }
@@ -154,11 +176,11 @@ public class SocketConnector : MonoBehaviour
         }
     }
 
-    public bool hasOpp()
+    public void hasOpp()
     {
         while (!s.isUpdate)
         {
-            if (Quit) return false; ;
+            if (Quit) return;
         }
         s.isUpdate = false;
         string back = s.data.Trim();
@@ -169,9 +191,10 @@ public class SocketConnector : MonoBehaviour
         if (op_id != -1)
         {
             opName = data[1];
-            return true;
+            isOpEnter = true;
+            //return true;
         }
-        return false;
+        //return false;
     }
 
 
@@ -180,7 +203,7 @@ public class SocketConnector : MonoBehaviour
         Send("login");
         Send(account + "," + password);
         string back = GetData();
-        if (back.Equals("fail"))
+        if (String.Compare(back, "fail") == 0)
         {
             return false;
         }
@@ -195,7 +218,8 @@ public class SocketConnector : MonoBehaviour
         Send("register");
         Send(email + "," + phone + "," + password + "," + username);
         string back = GetData();
-        if (back.Equals("fail"))
+        //Debug.Log(back);
+        if (String.Compare(back, "fail") == 0)
         {
             return false;
         }
