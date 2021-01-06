@@ -92,6 +92,6 @@ public class UI_MainMenu : UIViewTemplate
 
     private void setBtnCreateBattleRoom()
     {
-        //TODO
+        UI_Controller.Instance.UI_List[UIViewTemplate.CreateBattleRoom].OnShow();
     }
 }

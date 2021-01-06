@@ -44,7 +44,7 @@ public class SocketHelper : MonoBehaviour
         //sd.socket = this.socket;
 
         //服务器IP地址
-        IPAddress address = IPAddress.Parse("10.20.187.144");
+        IPAddress address = IPAddress.Parse("106.52.45.62");
 
         //服务器端口
         IPEndPoint endpoint = new IPEndPoint(address, 9090);
@@ -138,6 +138,7 @@ public class SocketHelper : MonoBehaviour
                     break;
                 }
                 data = Encoding.Default.GetString(bytes);
+                //Debug.Log("Helper:" + data);
                 isUpdate = true;
             }
             catch (Exception e)

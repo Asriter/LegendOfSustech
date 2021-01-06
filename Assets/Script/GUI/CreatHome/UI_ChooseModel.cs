@@ -48,18 +48,21 @@ public class UI_ChooseModel : UIViewTemplate
     }
     private void setBtnBuildRoom()
     {
-        createRoom._roomName = socketConnector.BuildRoom();
-        //未检测连接断开状态
-        //TODO
-        if (createRoom._roomName == -1)
+        Debug.Log(createRoom._roomName);
+        //createRoom._roomName = socketConnector.BuildRoom();
+        if (socketConnector.BuildRoom())
+        //if(true)
+        {
+            createRoom._roomName = socketConnector.Room;
+            //打开房间窗口
+            battleRoom.OnShow();
+            this.OnHide();
+        }
+        else
         {
             UnityEditor.EditorUtility.DisplayDialog("连接错误", "网络连接错误，请重试", "确认");
             return;
         }
-
-        //打开房间窗口
-        battleRoom.OnShow();
-        this.OnHide();
     }
 
     private void setBtnAddRoom()
@@ -78,7 +81,7 @@ public class UI_ChooseModel : UIViewTemplate
 
         string name = socketConnector.AttendRoom(_roomNumber);
         //连接失败
-        if(name.Equals("fail"))
+        if (name.Equals("fail"))
         {
             UnityEditor.EditorUtility.DisplayDialog("连接错误", "无法加入房间", "确认");
             return;

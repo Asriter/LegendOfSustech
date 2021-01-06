@@ -48,11 +48,11 @@ public class UI_BattleRoom : UIViewTemplate
         isReady = false;
 
         //判断我方用不用等人
-        if(!socketConnector.isMy)
+        if (!socketConnector.isMy)
         {
             isOppAddRoom = true;
             loadOppData();
-}
+        }
 
         //加入监听器
         btnEmBattle.onClick.AddListener(setBtnEmbattle);
@@ -66,65 +66,65 @@ public class UI_BattleRoom : UIViewTemplate
 
     //加载对手信息
     private void loadOppData()
-{
-    oppUserName.text = socketConnector.opName;
-    //TODO没有level
-    oppLevel.text = "233";
-}
-
-//监听器
-private void setBtnReady()
-{
-    if (isEmBattle && !isReady && isOppAddRoom)
     {
-        if (sceneData.MyList == null)
-        {
-            UnityEditor.EditorUtility.DisplayDialog("连接错误", "阵容配置，请重试", "确认");
-            return;
-        }
+        oppUserName.text = socketConnector.opName;
+        //TODO没有level
+        oppLevel.text = "233";
+    }
 
-        List<List<int>> battleDataList = socketConnector.StartBattle(sceneData.MyList);
-        //判断谁是主视角
-        if (!socketConnector.isMy)
+    //监听器
+    private void setBtnReady()
+    {
+        if (isEmBattle && !isReady && isOppAddRoom)
         {
-            foreach (List<int> list in battleDataList)
+            if (sceneData.MyList == null)
             {
-                list[0] *= -1;
+                UnityEditor.EditorUtility.DisplayDialog("连接错误", "阵容配置，请重试", "确认");
+                return;
+            }
+
+            List<List<int>> battleDataList = socketConnector.StartBattle(sceneData.MyList);
+            //判断谁是主视角
+            if (!socketConnector.isMy)
+            {
+                foreach (List<int> list in battleDataList)
+                {
+                    list[0] *= -1;
+                }
+            }
+
+            //TODO生成BattleData，但是由于没有对方的阵容该步骤暂时无法完成
+            //TODO根据生成的BattleDATA调用Scene
+            //SceneManager.LoadScene("BattleField");
+        }
+    }
+
+    private void setBtnEmbattle()
+    {
+        if (isOppAddRoom && !isReady)
+        {
+            UI_Controller.Instance.UI_List[UIViewTemplate.Embattle].OnShow();
+            isEmBattle = true;
+        }
+    }
+
+    private void setBtnReturn()
+    {
+        sceneData.MyList = null;
+
+    }
+
+    //循环检测
+    void Update()
+    {
+        if (isStart && !isOppAddRoom)
+        {
+            if (socketConnector.hasOpp())
+            {
+                isOppAddRoom = true;
+                this.loadOppData();
             }
         }
-
-        //TODO生成BattleData，但是由于没有对方的阵容该步骤暂时无法完成
-        //TODO根据生成的BattleDATA调用Scene
-        //SceneManager.LoadScene("BattleField");
     }
-}
-
-private void setBtnEmbattle()
-{
-    if (isOppAddRoom && !isReady)
-    {
-        UI_Controller.Instance.UI_List[UIViewTemplate.Embattle].OnShow();
-        isEmBattle = true;
-    }
-}
-
-private void setBtnReturn()
-{
-    sceneData.MyList = null;
-
-}
-
-//循环检测
-void Update()
-{
-    if (isStart && !isOppAddRoom)
-    {
-        if (socketConnector.hasOpp())
-        {
-            isOppAddRoom = true;
-            this.loadOppData();
-        }
-    }
-}
 
 }

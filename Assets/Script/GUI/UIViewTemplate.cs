@@ -24,6 +24,8 @@ public class UIViewTemplate : MonoBehaviour
 
     public const int CreateBattleRoom = 3;  //建房
 
+    public const int Friends = 4; //好友
+
     public UIViewState ViewState = UIViewState.Visible;
     //储存所有的UI
     private List<UIViewTemplate> UI_List;

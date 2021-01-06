@@ -11,7 +11,7 @@ public class UI_Embattle : UIViewTemplate
     //[SerializeField] Canvas canvas;
     [SerializeField] Button Return;
     [SerializeField] List<Button> tile;
-     SceneData sceneData;
+    SceneData sceneData;
     [SerializeField] UI_CharacterButtom characterButtomModel;//下面菜单里prefab的本体
     [SerializeField] private Transform buttonRoot;//菜单里单位的父节点
     [SerializeField] Text nowCostText;
@@ -20,14 +20,14 @@ public class UI_Embattle : UIViewTemplate
 
     private List<int[]> myList;//我的阵营
 
-    private int[,] location = new int[3,3];    //用来存该单位放置的单位类型
-    private int[,] level = new int[3,3];    //用来存该单位放置的等级
+    private int[,] location = new int[3, 3];    //用来存该单位放置的单位类型
+    private int[,] level = new int[3, 3];    //用来存该单位放置的等级
     private int _cost;      //当前玩家等级拥有的cost，从SceneData中获得
     private int _totalCost;
 
     private bool isStart = false;
 
-    private int[] nextCharacter = new int[2]{-1, -1};   //0-》类型， 1-》等级
+    private int[] nextCharacter = new int[2] { -1, -1 };   //0-》类型， 1-》等级
 
     //暂时还没加入翻页的功能，也不好分辨那个单位等级为多少
 
@@ -81,7 +81,7 @@ public class UI_Embattle : UIViewTemplate
             if (i < length)
             {
                 cb.initial(sceneData.CanSetCharacter[i][0], sceneData.CanSetCharacter[i][1]);
-                cb.initial(sceneData.CanSetCharacter[i][0], sceneData.CanSetCharacter[i][1]);
+                //cb.initial(sceneData.CanSetCharacter[i][0], sceneData.CanSetCharacter[i][1]);
             }
         }
         isStart = true;
@@ -96,11 +96,27 @@ public class UI_Embattle : UIViewTemplate
         }
     }
 
+    public override void OnHide()
+    {
+        RemoveAllChildren(buttonRoot.gameObject);
+        base.OnHide();
+    }
+
+    private static void RemoveAllChildren(GameObject parent)
+    {
+        Transform transform;
+        for (int i = 0; i < parent.transform.childCount; i++)
+        {
+            transform = parent.transform.GetChild(i);
+            GameObject.Destroy(transform.gameObject);
+        }
+    }
+
     //监听器
     private void setBtnTile(int x, int y)
     {
         //判断是不是重复点击
-        if(isDoubleClick)
+        if (isDoubleClick)
             return;
 
         //先判断是不是第二次点击，在next为空的时候再一次点击该按钮，如果是则删掉该位置的单位
@@ -178,10 +194,11 @@ public class UI_Embattle : UIViewTemplate
         }*/
         this.OnHide();
         isStart = false;
+        sceneData.MyList = myList;
 
         //试试看在这里直接开打？
-        sceneData.MyList = myList;
-        SceneManager.LoadScene("BattleField");
+        /*sceneData.MyList = myList;
+        SceneManager.LoadScene("BattleField");*/
     }
 
     //根据单位修改图片
@@ -215,16 +232,16 @@ public class UI_Embattle : UIViewTemplate
     //尝试弄个计时出来，多少秒内不能触发第二次
     void Update()
     {
-        if(isDoubleClick)
+        if (isDoubleClick)
         {
             DateTime newTime = DateTime.Now;
             TimeSpan timeSpan = newTime - nowTime;
-            if(timeSpan.Milliseconds > 100)
+            if (timeSpan.Milliseconds > 100)
                 isDoubleClick = false;
         }
 
         //检测，随时调整text的内容
-        if(isStart)
+        if (isStart)
         {
             nowCostText.text = _cost + "";
             totalCostText.text = _totalCost + "";
