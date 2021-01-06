@@ -26,6 +26,8 @@ public class SceneData : MonoBehaviour
 
     private int _totalCost = 20;            //该玩家在该等级拥有的cost
 
+    public int _uid = -1;
+
     public Socket socket;
 
     public bool isReEmbattle = false;

@@ -85,12 +85,12 @@ public class UI_Login : UIViewTemplate
             sd.UserName = "testUser";
             //TODO加载该玩家拥有的角色
             List<int[]> canSetCharacter = socketConnector.GetAllChess();
-            //test
-            Debug.Log(canSetCharacter.Count);
-            for (int i = 0; i < canSetCharacter.Count; i++)
-            {
-                Debug.Log(canSetCharacter[i][0] + " " + canSetCharacter[i][1]);
-            }
+
+            //加载我方UID，名字和等级
+            string[] playerData = socketConnector.GetSelf();
+            sd._uid = int.Parse(playerData[0]);
+            sd.UserName = playerData[1];
+            sd.Level = int.Parse(playerData[2]);
 
 
             //此时暂时直接添加用作测试

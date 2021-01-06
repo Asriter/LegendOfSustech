@@ -37,6 +37,7 @@ public class UI_ChooseModel : UIViewTemplate
         RoomNumber.onEndEdit.AddListener(End_Value_RoomNumber);
         //加入监听器
         btnAddRoom.onClick.AddListener(setBtnAddRoom);
+        //btnBuildRoom.onClick.AddListener(setBtnBuildRoom);
         btnBuildRoom.onClick.AddListener(setBtnBuildRoom);
         btnCurrectAddRoom.onClick.AddListener(setBtnCurrentAddRoom);
         btnReturn.onClick.AddListener(setBtnReturn);
@@ -50,8 +51,8 @@ public class UI_ChooseModel : UIViewTemplate
     {
         Debug.Log(createRoom._roomName);
         //createRoom._roomName = socketConnector.BuildRoom();
-        if (socketConnector.BuildRoom())
-        //if(true)
+        if (GameObject.Find("SceneData").GetComponent<SocketConnector>().BuildRoom())
+        //if(socketConnector.ID == 1)
         {
             createRoom._roomName = socketConnector.Room;
             //打开房间窗口
@@ -64,6 +65,14 @@ public class UI_ChooseModel : UIViewTemplate
             return;
         }
     }
+
+    /*private void test()
+    {
+        socketConnector.BuildRoom();
+        createRoom._roomName = socketConnector.Room;
+            //打开房间窗口
+        battleRoom.OnShow();
+    }*/
 
     private void setBtnAddRoom()
     {

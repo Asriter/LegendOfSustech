@@ -87,7 +87,7 @@ public class UI_MainMenu : UIViewTemplate
 
     private void setBtnFriends()
     {
-        //TODO
+        UI_Controller.Instance.UI_List[UIViewTemplate.Friends].OnShow();
     }
 
     private void setBtnCreateBattleRoom()

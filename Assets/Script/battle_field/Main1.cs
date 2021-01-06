@@ -38,14 +38,15 @@ public class Main1 : MonoBehaviour
 
         SceneData sc = GameObject.Find("SceneData").GetComponent<SceneData>();
         myList = sc.MyList;
+        opList = sc.OpList;
         
-        opList.Add(new int[7]{2,0,0,0,0,0,0});
+        /*opList.Add(new int[7]{2,0,0,0,0,0,0});
         opList.Add(new int[7]{2,1,0,0,0,0,0});
         opList.Add(new int[7]{1,0,1,0,0,0,0});
         opList.Add(new int[7]{3,1,1,0,0,0,0});
         opList.Add(new int[7]{3,2,1,0,0,0,0});
         opList.Add(new int[7]{1,0,2,0,0,0,0});
-        opList.Add(new int[7]{1,2,2,0,0,0,0});
+        opList.Add(new int[7]{1,2,2,0,0,0,0});*/
 
         battle_data bd = new battle_data(myList, opList);
 
