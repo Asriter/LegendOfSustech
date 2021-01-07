@@ -38,6 +38,9 @@ public class UI_BattleRoom : UIViewTemplate
     private bool isEmBattle = false;
     private bool isReady = false;
 
+    //线程，用于检测是否有人进入房间
+    Thread t;
+
     //用于阶段性检测连接状态
     DateTime nowTime;
 
@@ -101,19 +104,39 @@ public class UI_BattleRoom : UIViewTemplate
             }
 
             List<List<int>> battleDataList = socketConnector.StartBattle(sceneData.MyList);
+
+
             //判断谁是主视角
-            if (!socketConnector.isThis)
+            /*if (!socketConnector.isThis)
             {
                 foreach (List<int> list in battleDataList)
                 {
-                    list[0] *= -1;
+                    if(list[0] == 0)
+                        list[0] = 1;
+                    else
+                        list[0] = 0;
                 }
-            }
+            }*/
 
             //生成地方阵容数据
             List<int[]> OpList = socketConnector.opList;
             sceneData.OpList = OpList;
-            //TODO根据生成的BattleDATA调用Scene
+            sceneData.battleDataList = battleDataList;
+
+            //检测是否掉线
+            /*if (battleDataList.Count == 0)
+            {
+                Debug.Log(socketConnector.opOffline);
+            }*/
+            Debug.Log(socketConnector.opOffline);
+            Debug.Log(battleDataList.Count);
+            foreach(List<int> l in battleDataList)
+            {
+                Debug.Log("recv:" + l[0] + " " + l[1] + " " + l[2]);
+            }
+            
+            //根据生成的BattleDATA调用Scene
+            sceneData.isClientCompute = false;
             SceneManager.LoadScene("BattleField");
         }
     }
@@ -150,9 +173,11 @@ public class UI_BattleRoom : UIViewTemplate
 
         if (isStart && !isOppAddRoom)
         {
-            //Thread t = new Thread(new ThreadStart(socketConnector.hasOpp));
-            //t.Start();
-            socketConnector.hasOpp();
+            if(t != null)
+                t.Abort();
+            t = new Thread(new ThreadStart(socketConnector.hasOpp));
+            t.Start();
+            //socketConnector.hasOpp();
             if (socketConnector.isOpEnter)
             {
                 isOppAddRoom = true;

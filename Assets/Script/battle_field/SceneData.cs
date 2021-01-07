@@ -65,6 +65,12 @@ public class SceneData : MonoBehaviour
 
     public int COST => _totalCost;
 
+    //决定battleData是由自己计算生成还是服务器下发
+    public bool isClientCompute = false;
+
+    //服务器下发的battleData
+    public List<List<int>> battleDataList;
+
     //初始化bd
     public void initialBattleData(List<List<int>> battleMassage)
     {

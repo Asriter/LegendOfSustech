@@ -48,8 +48,15 @@ public class Main1 : MonoBehaviour
         opList.Add(new int[7]{1,0,2,0,0,0,0});
         opList.Add(new int[7]{1,2,2,0,0,0,0});*/
 
-        battle_data bd = new battle_data(myList, opList);
-
+        //由scenedata决定生成battledata还是服务器下发
+        battle_data bd;
+        if(sc.isClientCompute)
+            bd = new battle_data(myList, opList);
+        else
+        {
+            bd = new battle_data(myList, opList, sc.battleDataList);
+        }
+            
         //家在数据到controller中
         controller.Instance.Initial(bd);
 

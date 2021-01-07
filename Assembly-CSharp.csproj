@@ -71,8 +71,10 @@
      <Compile Include="Assets\Script\GUI\UI_Start.cs" />
      <Compile Include="Assets\Script\Socket\SocketConnector.cs" />
      <Compile Include="Assets\Script\Socket\SocketHelper.cs" />
+     <Compile Include="Assets\Script\battle_field\BattleCreater.cs" />
      <Compile Include="Assets\Script\battle_field\GridUnit.cs" />
      <Compile Include="Assets\Script\battle_field\HP_MP_Bar.cs" />
+     <Compile Include="Assets\Script\battle_field\Main.cs" />
      <Compile Include="Assets\Script\battle_field\Main1.cs" />
      <Compile Include="Assets\Script\battle_field\SceneData.cs" />
      <Compile Include="Assets\Script\battle_field\battle_data.cs" />

@@ -34,6 +34,11 @@ public class UI_BattleResult : UIViewTemplate
     private void setBtnReturn()
     {
         //GameObject.Find("SceneData").GetComponent<SceneData>().isReEmbattle = true;
+        //TODO还原SceneData中的属性
+        SceneData sd = GameObject.Find("SceneData").GetComponent<SceneData>();
+        sd.OpList = null;
+        sd.battleDataList = null;
+
         this.OnHide();
         SceneManager.LoadScene("Menu");
     }
