@@ -32,6 +32,8 @@ public class controller : MonoBehaviour
     //GridUnit[,,] gridUnits = new GridUnit[2,3,3];
     [SerializeField] Transform CharacterTransform;
 
+    [SerializeField] UI_BattleResult battleResult;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -95,7 +97,7 @@ public class controller : MonoBehaviour
                         //往格子里加单位
                         grid.SetCharacter(battleData.GetCharacterList()[i, x, y]);
                         //设置character中自己的坐标
-                        battleData.GetCharacterList()[i, x, y].SetLocation(new Vector3Int(i,x,y));
+                        battleData.GetCharacterList()[i, x, y].SetLocation(new Vector3Int(i, x, y));
                     }
                 }
             }
@@ -133,11 +135,17 @@ public class controller : MonoBehaviour
     {
         Character[,,] characterList = battleData.GetCharacterList();
         yield return new WaitForSeconds(0.5f);
-        Debug.Log(battleData.GetBattleData().Count);
+        //Debug.Log(battleData.GetBattleData().Count);
+
+        foreach (List<int> l in battleData.GetBattleData())
+        {
+            Debug.Log("new:" + l[0] + " " + l[1] + " " + l[2]);
+        }
+
         foreach (List<int> list in battleData.GetBattleData())
         {
             //Debug.Log("该条战斗信息:" + list[0] + " " + list[1] + " " + list[2] + " " + list[3] + " " + list[4]);
-            
+
             //是否使用技能
             bool isSkill = list[3] == 1 ? true : false;
 
@@ -163,7 +171,7 @@ public class controller : MonoBehaviour
             GetComponentInChildren<HP_MP_Bar>().setMP();
 
             //播放攻击动画
-            if(isSkill)
+            if (isSkill)
                 characterList[list[0], list[1], list[2]].Start_Skill_cartoon(targets);
             else
                 characterList[list[0], list[1], list[2]].Start_Attack_cartoon(targets);
@@ -176,7 +184,7 @@ public class controller : MonoBehaviour
             }
             yield return new WaitForSeconds(0.5f);
             //调整蓝条
-            foreach(Character c in targets)
+            foreach (Character c in targets)
             {
                 c.gameObject.transform.parent.gameObject.
                 GetComponentInChildren<HP_MP_Bar>().setHP();
@@ -193,7 +201,7 @@ public class controller : MonoBehaviour
                         //该位置的单位不为空
                         if (battleData.hasCharacterInGrid(i, x, y))
                         {
-                            if(characterList[i, x, y].GetHp() <= 0 && 
+                            if (characterList[i, x, y].GetHp() <= 0 &&
                                characterList[i, x, y].gameObject.transform.parent.gameObject.activeSelf)
                             {
                                 //Debug.Log(characterList[i, x, y].gameObject.activeSelf);
@@ -206,12 +214,14 @@ public class controller : MonoBehaviour
             }
 
             //有人死和没人死暂停的时间不同
-            if(hasDie)
+            if (hasDie)
                 yield return new WaitForSeconds(0.4f);
             else
                 yield return new WaitForSeconds(0.1f);
         }
         yield return new WaitForSeconds(0f);
+        //结算界面
+        battleResult.OnShow();
     }
 
     //通过坐标获取对应grid

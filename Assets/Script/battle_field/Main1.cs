@@ -12,6 +12,8 @@ public class Main1 : MonoBehaviour
 
     [SerializeField] public controller c;
 
+    [SerializeField] UI_BattleResult battleResult;
+
     public battle_data battleData;
     // Start is called before the first frame update
 
@@ -24,24 +26,37 @@ public class Main1 : MonoBehaviour
         List<int[]> myList = new List<int[]>();
         List<int[]> opList = new List<int[]>();
 
-        myList.Add(new int[7]{2,0,0,0,0,0,0});
+        battleResult.OnHide();
+
+        /*myList.Add(new int[7]{2,0,0,0,0,0,0});
         myList.Add(new int[7]{2,1,0,0,0,0,0});
         myList.Add(new int[7]{2,2,0,0,0,0,0});
         myList.Add(new int[7]{1,0,1,0,0,0,0});
         myList.Add(new int[7]{3,2,1,0,0,0,0});
         myList.Add(new int[7]{3,0,2,0,0,0,0});
-        myList.Add(new int[7]{3,1,2,0,0,0,0});
+        myList.Add(new int[7]{3,1,2,0,0,0,0});*/
+
+        SceneData sc = GameObject.Find("SceneData").GetComponent<SceneData>();
+        myList = sc.MyList;
+        opList = sc.OpList;
         
-        opList.Add(new int[7]{2,0,0,0,0,0,0});
+        /*opList.Add(new int[7]{2,0,0,0,0,0,0});
         opList.Add(new int[7]{2,1,0,0,0,0,0});
         opList.Add(new int[7]{1,0,1,0,0,0,0});
         opList.Add(new int[7]{3,1,1,0,0,0,0});
         opList.Add(new int[7]{3,2,1,0,0,0,0});
         opList.Add(new int[7]{1,0,2,0,0,0,0});
-        opList.Add(new int[7]{1,2,2,0,0,0,0});
+        opList.Add(new int[7]{1,2,2,0,0,0,0});*/
 
-        battle_data bd = new battle_data(myList, opList);
-
+        //由scenedata决定生成battledata还是服务器下发
+        battle_data bd;
+        if(sc.isClientCompute)
+            bd = new battle_data(myList, opList);
+        else
+        {
+            bd = new battle_data(myList, opList, sc.battleDataList);
+        }
+            
         //家在数据到controller中
         controller.Instance.Initial(bd);
 

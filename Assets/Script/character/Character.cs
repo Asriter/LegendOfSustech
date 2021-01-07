@@ -334,6 +334,11 @@ public abstract class Character : MonoBehaviour
         this.location = location;
     }
 
+    public int getMaxMp()
+    {
+        return _skillMp;
+    }
+
     //退场动画，效果等
     protected virtual void Die()
     {

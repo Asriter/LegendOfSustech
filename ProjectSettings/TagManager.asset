@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: stareLayout
+    uniqueID: 2222586965
+    locked: 0
+  - name: MenuLayout
+    uniqueID: 3783162621
+    locked: 0
+  - name: BattleLayout
+    uniqueID: 3357887753
+    locked: 0

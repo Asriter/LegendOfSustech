@@ -55,8 +55,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Script\GUI\BattleField\UI_BattleResult.cs" />
+     <Compile Include="Assets\Script\GUI\CreatHome\UI_BattleRoom.cs" />
+     <Compile Include="Assets\Script\GUI\CreatHome\UI_ChooseModel.cs" />
+     <Compile Include="Assets\Script\GUI\CreatHome\UI_CreateRoom.cs" />
+     <Compile Include="Assets\Script\GUI\Embattle\UI_CharacterButtom.cs" />
+     <Compile Include="Assets\Script\GUI\Embattle\UI_Embattle.cs" />
+     <Compile Include="Assets\Script\GUI\Friends\UI_FriendMessage.cs" />
+     <Compile Include="Assets\Script\GUI\Friends\UI_Friends.cs" />
+     <Compile Include="Assets\Script\GUI\UIViewTemplate.cs" />
+     <Compile Include="Assets\Script\GUI\UI_Controller.cs" />
+     <Compile Include="Assets\Script\GUI\UI_Login.cs" />
+     <Compile Include="Assets\Script\GUI\UI_MainMenu.cs" />
+     <Compile Include="Assets\Script\GUI\UI_Register.cs" />
+     <Compile Include="Assets\Script\GUI\UI_Start.cs" />
+     <Compile Include="Assets\Script\Socket\SocketConnector.cs" />
+     <Compile Include="Assets\Script\Socket\SocketHelper.cs" />
+     <Compile Include="Assets\Script\battle_field\BattleCreater.cs" />
      <Compile Include="Assets\Script\battle_field\GridUnit.cs" />
      <Compile Include="Assets\Script\battle_field\HP_MP_Bar.cs" />
+     <Compile Include="Assets\Script\battle_field\Main.cs" />
      <Compile Include="Assets\Script\battle_field\Main1.cs" />
      <Compile Include="Assets\Script\battle_field\SceneData.cs" />
      <Compile Include="Assets\Script\battle_field\battle_data.cs" />
@@ -67,16 +85,25 @@
      <Compile Include="Assets\Script\character\Calmer.cs" />
      <Compile Include="Assets\Script\character\Character.cs" />
      <Compile Include="Assets\Script\character\CharacterFactory.cs" />
+     <Compile Include="Assets\Script\character\Darius.cs" />
+     <Compile Include="Assets\Script\character\DoubleAgent.cs" />
      <Compile Include="Assets\Script\character\Explosive.cs" />
      <Compile Include="Assets\Script\character\GroupHealer.cs" />
+     <Compile Include="Assets\Script\character\Lazer.cs" />
      <Compile Include="Assets\Script\character\Linkage.cs" />
+     <Compile Include="Assets\Script\character\Marshall.cs" />
      <Compile Include="Assets\Script\character\MvpTemp.cs" />
      <Compile Include="Assets\Script\character\Paladin.cs" />
+     <Compile Include="Assets\Script\character\Pierce.cs" />
      <Compile Include="Assets\Script\character\Silence.cs" />
+     <Compile Include="Assets\Script\character\Sputter.cs" />
      <Compile Include="Assets\Script\character\TaiChi.cs" />
      <Compile Include="Assets\Script\character\TankTemp.cs" />
      <Compile Include="Assets\Script\character\Taunter.cs" />
+     <Compile Include="Assets\Script\character\Transformer.cs" />
+     <Compile Include="Assets\Script\character\Volition.cs" />
      <Compile Include="Assets\Script\character\WarriorTemp.cs" />
+     <Compile Include="Assets\Script\constant.cs" />
  <Reference Include="UnityEngine">
  <HintPath>E:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>
